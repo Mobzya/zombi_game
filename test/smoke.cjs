@@ -54,10 +54,10 @@ const bike=game.makeVehicle(origin.x+20,origin.y,'motorcycle');assert.equal(bike
 console.log('PASS: AI vehicle routes, motorcycle and tank physics');
 // Endgame tests: one natural infected casualty win and one natural police suppression win.
 function round(){game.startPick();const w=game.world;const p=w.persons[0];game.selectPatient(p);p.sick=.001;game.update(.07);const z=w.zombies[0];assert.ok(z&&z.hp>0);return {w,z};}
-let a=round();let bHuman=a.w.persons.find(h=>h.hp>0);a.w.persons=[bHuman];a.z.x=100;a.z.y=100;bHuman.x=105;bHuman.y=101;bHuman.gun=null;bHuman.bravery=0;bHuman.hp=35;
+let a=round();let bHuman=a.w.persons.find(h=>h.hp>0);a.w.persons=[bHuman];a.z.x=100;a.z.y=100;bHuman.x=105;bHuman.y=101;{const place=game.nearestCityAccess(bHuman.x,bHuman.y);bHuman.x=place.x;bHuman.y=place.y;a.z.x=place.x+7;a.z.y=place.y-7;}bHuman.gun=null;bHuman.bravery=0;bHuman.hp=35;a.w.popStart=1;a.w.reinforcementBudget=0;
 for(let i=0;i<300&&game.phase==='game';i++)game.update(.05);
 assert.equal(game.phase,'end','zombie win must conclude');
-let bRound=round();let armed=bRound.w.persons.find(h=>h.hp>0);bRound.w.persons=[armed];armed.x=160;armed.y=120;armed.hp=320;armed.role='police';armed.bravery=1;armed.gun={key:'lmg',ammo:120,cooldown:0};bRound.z.x=210;bRound.z.y=120;bRound.z.hp=50;
+let bRound=round();let armed=bRound.w.persons.find(h=>h.hp>0);bRound.w.persons=[armed];armed.x=160;armed.y=120;armed.hp=320;armed.role='police';armed.bravery=1;armed.gun={key:'lmg',ammo:120,cooldown:0};bRound.z.x=210;bRound.z.y=120;bRound.z.hp=50;bRound.w.popStart=1;bRound.w.reinforcementBudget=0;
 for(let i=0;i<500&&game.phase==='game';i++)game.update(.04);
 assert.equal(game.phase,'end','human defense must conclude');
 console.log('PASS: BOTH end conditions occur via real combat');

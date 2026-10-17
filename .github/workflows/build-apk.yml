@@ -5,7 +5,7 @@ on:
   pull_request:
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -15,16 +15,11 @@ jobs:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@v4
-      - name: Unpack v0.4 improved simulation
-        run: |
-          if test -f bundle-v04.b64; then
-            base64 -d bundle-v04.b64 | tar -xJ
-          fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - name: Ensure Android SDK 35
+      - name: Verify SDK and install platform if missing
         run: |
           SDKMGR=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)
           test -n "$SDKMGR"
@@ -32,12 +27,12 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
-      - name: Test gameplay logic
+      - name: Verify JavaScript syntax and run smoke tests
         run: |
           node --check app/src/main/assets/game.js
           node test/smoke.cjs
           node test/regression.cjs
-      - name: Build debug and optimized release
+      - name: Build debug and minified release
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
       - name: Test-sign optimized release
         run: |
@@ -45,7 +40,7 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/zipalign" -p -f 4 app/build/outputs/apk/release/app-release-unsigned.apk /tmp/app-aligned.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/outbreak-test.keystore --ks-key-alias outbreak --ks-pass pass:android123 --key-pass pass:android123 --out app/build/outputs/apk/release/OUTBREAK-v0.4-optimized-test.apk /tmp/app-aligned.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify app/build/outputs/apk/release/OUTBREAK-v0.4-optimized-test.apk
-      - name: Verify APKs
+      - name: Verify files
         run: |
           test -s app/build/outputs/apk/debug/app-debug.apk
           test -s app/build/outputs/apk/release/OUTBREAK-v0.4-optimized-test.apk
@@ -60,15 +55,3 @@ jobs:
           name: OUTBREAK-optimized-test-APK
           path: app/build/outputs/apk/release/OUTBREAK-v0.4-optimized-test.apk
           if-no-files-found: error
-
-      - name: Persist editable source after verified APK build
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/final-survivors-events-v0-4'
-        run: |
-          if test -f bundle-v04.b64; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git rm bundle-v04.b64
-            git add -A
-            git commit -m 'feat: commit editable Outbreak v0.4 final survivor fixes and events'
-            git push origin HEAD:feature/final-survivors-events-v0-4
-          fi

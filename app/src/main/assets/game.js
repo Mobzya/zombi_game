@@ -30,10 +30,16 @@ const PERKS=[
  ['brood','⬡','МАТКА МУТАЦИЙ','Чаще возникают прыгуны, бронированные и ревуны; появляются даже без ранних мутаций.',120,'brute'],
  ['pack','◆','ОХОТНИЧИЙ РЕЗОНАНС','Вблизи товарищей скорость и сила удара стаи растут.',155,'hive'],
  ['volatile','⬡','ПОСМЕРТНАЯ ВСПЫШКА','Редкие заражённые взрываются спорой при гибели, сея панику.',220,'corpse'],
- ['eclipse','⬡','АЛЬФА-ВСПЫШКА','Каждая десятая жертва может превратиться в элитного зомби.',320,'brood']
+ ['eclipse','⬡','АЛЬФА-ВСПЫШКА','Каждая десятая жертва может превратиться в элитного зомби.',320,'brood'],
+ ['signal','◆','ЭХО ПОСЛЕДНИХ','При малом числе выживших зомби получают глобальные ориентиры от стаи.',85,'scent'],
+ ['sappers','◆','ПОДКОПЫ','Осадная стая отмечает двери и баррикады, сокращая задержку у порогов.',108,'siege'],
+ ['feast','⬡','ПИЩЕВАЯ ЦЕПЬ','После заражения в радиусе 75 остальные зомби получают краткую ярость.',160,'pack'],
+ ['ambassador','◆','МАЯК ЗАРАЗЫ','Зомби автоматически распространяются к кварталам с оставшимися людьми.',205,'signal'],
+ ['iron','⬡','КОРОЛИ ОСАДЫ','Тяжёлые зомби могут крушить стоящие машины и блокпосты с двойной силой.',270,'brood'],
+ ['nocturne','⬡','ЗАКАТ ЧЕЛОВЕЧЕСТВА','После тревоги 70% стая объединяется на последнюю охоту.',360,'ambassador']
 ];
 const MAPS=[{n:290,w:2170,h:1560}]; // ONE permanent map: Ironbridge city, identical geometry on every difficulty
-const GUNS={revolver:{name:'РЕВОЛЬВЕР',range:175,dmg:48,rate:1.05,ammo:6,bullets:1,speed:540,color:'#ffe7ab'},carbine:{name:'КАРАБИН',range:210,dmg:25,rate:.24,ammo:25,bullets:1,speed:590,color:'#c3d8d5'},lmg:{name:'ПУЛЕМЁТ',range:213,dmg:20,rate:.125,ammo:70,bullets:1,speed:545,color:'#ead590'},sniper:{name:'СНАЙПЕРКА',range:310,dmg:100,rate:2.3,ammo:5,bullets:1,speed:890,color:'#f0ecdd'},molotov:{name:'КОКТЕЙЛЬ',range:118,dmg:22,rate:2.5,ammo:3,bullets:1,speed:180,color:'#ef924f'},pistol:{name:'ПИСТОЛЕТ',range:152,dmg:27,rate:.48,ammo:13,bullets:1,speed:430,color:'#f6e39b'},smg:{name:'ПП',range:148,dmg:13,rate:.11,ammo:35,bullets:1,speed:475,color:'#f2d575'},shotgun:{name:'ДРОБОВИК',range:108,dmg:14,rate:.86,ammo:8,bullets:5,speed:380,color:'#ffc17b'},rifle:{name:'ВИНТОВКА',range:220,dmg:37,rate:.62,ammo:20,bullets:1,speed:610,color:'#fff4be'},grenade:{name:'ГРАНАТЫ',range:172,dmg:64,rate:2.6,ammo:4,bullets:1,speed:200,color:'#bde6a4'}};
+const GUNS={revolver:{name:'РЕВОЛЬВЕР',range:175,dmg:48,rate:1.05,ammo:6,bullets:1,speed:540,color:'#ffe7ab'},carbine:{name:'КАРАБИН',range:210,dmg:25,rate:.24,ammo:25,bullets:1,speed:590,color:'#c3d8d5'},lmg:{name:'ПУЛЕМЁТ',range:213,dmg:20,rate:.125,ammo:70,bullets:1,speed:545,color:'#ead590'},sniper:{name:'СНАЙПЕРКА',range:310,dmg:100,rate:2.3,ammo:5,bullets:1,speed:890,color:'#f0ecdd'},molotov:{name:'КОКТЕЙЛЬ',range:118,dmg:22,rate:2.5,ammo:3,bullets:1,speed:180,color:'#ef924f'},pistol:{name:'ПИСТОЛЕТ',range:152,dmg:27,rate:.48,ammo:13,bullets:1,speed:430,color:'#f6e39b'},smg:{name:'ПП',range:148,dmg:13,rate:.11,ammo:35,bullets:1,speed:475,color:'#f2d575'},shotgun:{name:'ДРОБОВИК',range:108,dmg:14,rate:.86,ammo:8,bullets:5,speed:380,color:'#ffc17b'},rifle:{name:'ВИНТОВКА',range:220,dmg:37,rate:.62,ammo:20,bullets:1,speed:610,color:'#fff4be'},grenade:{name:'ГРАНАТЫ',range:172,dmg:64,rate:2.6,ammo:4,bullets:1,speed:200,color:'#bde6a4'},crossbow:{name:'АРБАЛЕТ',range:235,dmg:85,rate:2.2,ammo:9,bullets:1,speed:630,color:'#c5a48a'},hunting:{name:'ОХОТНИЧИЙ КАРАБИН',range:275,dmg:57,rate:1.25,ammo:7,bullets:1,speed:780,color:'#c2caa7'},doublebarrel:{name:'ДВУСТВОЛКА',range:104,dmg:17,rate:1.5,ammo:2,bullets:9,speed:420,color:'#efb794'},machinepistol:{name:'АВТОПИСТОЛЕТ',range:127,dmg:10,rate:.085,ammo:44,bullets:1,speed:460,color:'#d8ba8c'},burst:{name:'ШТУРМОВАЯ ВИНТОВКА',range:240,dmg:19,rate:.19,ammo:30,bullets:2,speed:665,color:'#e6e3b6'},flamethrower:{name:'ОГНЕМЁТ',range:97,dmg:7,rate:.12,ammo:55,bullets:2,speed:220,color:'#ff985b'},flare:{name:'СИГНАЛЬНЫЙ ПИСТОЛЕТ',range:165,dmg:11,rate:1.15,ammo:5,bullets:1,speed:310,color:'#e69551'},taser:{name:'ЭЛЕКТРОШОКЕР',range:76,dmg:18,rate:1.2,ammo:12,bullets:1,speed:450,color:'#88cce5'}};
 function r(seed){return ()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;}}
 let rand=r(17),uid=1; const rnd=(a,b)=>a+rand()*(b-a), irnd=n=>Math.floor(rand()*n),clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),dst=(x,y,X,Y)=>Math.hypot(x-X,y-Y);
 function save(){try{localStorage.setItem('outbreak_v01',JSON.stringify({coins,owned}));}catch(e){}}
@@ -54,7 +60,7 @@ S('perksHint',perkTab==='passive'?'ПОСТОЯННЫЕ МУТАЦИИ · бол
 
 function resize(){const dpr=Math.min(2,window.devicePixelRatio||1);CW=720;CH=Math.round(CW*innerHeight/innerWidth);if(CH>550){CH=550;CW=Math.round(CH*innerWidth/innerHeight)}canvas.width=CW;canvas.height=CH;ctx.imageSmoothingEnabled=false;ctx.font='12px monospace';}
 window.addEventListener('resize',resize);resize();
-function newWorld(index=0,seed=604291){const info=MAPS[0],w={w:info.w,h:info.h,count:info.n,persons:[],zombies:[],buildings:[],cars:[],barriers:[],guns:[],bullets:[],particles:[],fires:[],clouds:[],events:[],tree:[],features:[],roadsX:[],roadsY:[],solids:[],gates:[],nav:null,navVersion:0,wallBuckets:new Map(),time:0,alarm:0,infections:0,zLost:0,popStart:info.n,round:false,first:null,stage:0,riotIn:0,patrolIn:0,finishWait:0,skills:{howl:0,fury:0,spore:0,breach:0},buffs:{fury:0,howl:0},focus:null};world=w;rand=r(seed);uid=1;
+function newWorld(index=0,seed=604291){const info=MAPS[0],w={w:info.w,h:info.h,count:info.n,persons:[],zombies:[],buildings:[],cars:[],barriers:[],guns:[],bullets:[],particles:[],fires:[],clouds:[],events:[],tree:[],features:[],roadsX:[],roadsY:[],solids:[],gates:[],nav:null,navVersion:0,wallBuckets:new Map(),time:0,alarm:0,infections:0,zLost:0,popStart:info.n,round:false,first:null,stage:0,riotIn:0,patrolIn:0,finishWait:0,skills:{howl:0,fury:0,spore:0,breach:0},buffs:{fury:0,howl:0},focus:null,reinforcementBudget:difficulty===2?24:difficulty===0?5:14,reinforcements:0,initialRemaining:info.n,originalDeaths:0,escaped:0,signals:[],eventHistory:[],eventQueue:[],eventCooldown:17,eventNext:0,eventResources:{materials:10,medkits:8},humanAid:0,globalSweepAt:0,lateSweep:0,navReach:null,navAudit:0,raidDone:0};world=w;rand=r(seed);uid=1;
 // District generator: uneven roads, pocket parks, courtyards, shops and narrow passageways.
 // Designed arterial boulevards, hospital access, an industrial service lane, park walks and old-town alleys.
 w.roadsX=[{at:0,w:52},{at:230,w:34},{at:490,w:70},{at:800,w:28},{at:1040,w:55},{at:1350,w:34},{at:1650,w:76},{at:1910,w:32},{at:2134,w:36}];
@@ -105,15 +111,15 @@ function rectWall(side,horizontal,a,b,x,y,building){return horizontal?{x:a,y:y-3
 
 const streetPoint=()=>{const vertical=rand()<.5,roads=vertical?w.roadsX:w.roadsY,road=roads[irnd(Math.max(1,roads.length-1))];return vertical?{x:clamp(road.at+road.w*.5+rnd(-road.w*.2,road.w*.2),15,w.w-15),y:rnd(15,w.h-15)}:{x:rnd(15,w.w-15),y:clamp(road.at+road.w*.5+rnd(-road.w*.2,road.w*.2),15,w.h-15)};};
 
-for(let i=0;i<info.n;i++){const role=i<Math.max(3,Math.floor(info.n*.035))?'police':rand()<.025?'medic':rand()<.045?'fighter':rand()<.055?'driver':rand()<.075?'organizer':'civilian';let p=streetPoint();if(rand()<.25&&w.buildings.length){let b=w.buildings[irnd(w.buildings.length)];p={x:b.x+rnd(15,Math.max(16,b.w-15)),y:b.y+rnd(15,Math.max(16,b.h-15))};}if(w.solids.some(o=>overlapCircle(p.x,p.y,6,o)))p=streetPoint();const a={id:uid++,x:p.x,y:p.y,vx:0,vy:0,role,kind:'human',hp:role==='police'?88:role==='fighter'?74:57,panic:0,bravery:role==='police'?.85:role==='fighter'?.67:rnd(.08,.68),group:i%9===0?i:Math.floor(i/9)*9,mode:'wander',tx:p.x,ty:p.y,decision:rnd(.1,2),attack:0,fitness:rand(),gun:null,seekCar:null,drivingStyle:rand(),inCar:null,infecting:false,sick:0,escaped:false,shade:irnd(5),angle:rnd(0,6.28),step:rnd(0,6),harvest:false};if(role==='police')a.gun=weapon('pistol');else if(role==='fighter'&&rand()<.23)a.gun=weapon('shotgun');w.persons.push(a);}
+for(let i=0;i<info.n;i++){const role=i<Math.max(3,Math.floor(info.n*.035))?'police':rand()<.025?'medic':rand()<.045?'fighter':rand()<.055?'driver':rand()<.075?'organizer':'civilian';let p=streetPoint();if(rand()<.25&&w.buildings.length){let b=w.buildings[irnd(w.buildings.length)];p={x:b.x+rnd(15,Math.max(16,b.w-15)),y:b.y+rnd(15,Math.max(16,b.h-15))};}if(w.solids.some(o=>overlapCircle(p.x,p.y,6,o)))p=streetPoint();const a={id:uid++,x:p.x,y:p.y,vx:0,vy:0,role,kind:'human',hp:role==='police'?88:role==='fighter'?74:57,panic:0,bravery:role==='police'?.85:role==='fighter'?.67:rnd(.08,.68),group:i%9===0?i:Math.floor(i/9)*9,mode:'wander',tx:p.x,ty:p.y,decision:rnd(.1,2),attack:0,fitness:rand(),gun:null,seekCar:null,drivingStyle:rand(),inCar:null,infecting:false,sick:0,escaped:false,shade:irnd(5),angle:rnd(0,6.28),step:rnd(0,6),harvest:false,original:true,medkits:role==='medic'?2:0,supplies:role==='organizer'?1:0,helpCooldown:0,morale:1,radio:false};if(role==='police')a.gun=weapon('pistol');else if(role==='fighter'&&rand()<.23)a.gun=weapon('shotgun');w.persons.push(a);}
 // All ammunition is supplied by existing police, gun racks, vehicles or dropped weapons.
-for(const b of w.buildings){if(b.supplies){for(let q=0;q<b.supplies;q++){let kind=b.type==='police'?(['pistol','smg','carbine','shotgun','revolver'][q%5]):(['shotgun','smg','rifle','grenade','sniper','lmg','revolver','carbine','molotov'][q%9]);w.guns.push({x:b.x+19+(q%3)*13,y:b.y+24+Math.floor(q/3)*11,gun:weapon(kind),owner:null});}}}
+for(const b of w.buildings){if(b.supplies){for(let q=0;q<b.supplies;q++){let kind=b.type==='police'?(['pistol','smg','carbine','shotgun','revolver'][q%5]):(['shotgun','smg','rifle','grenade','sniper','lmg','revolver','carbine','molotov','crossbow','hunting','doublebarrel','machinepistol','burst','flamethrower','flare','taser'][q%17]);w.guns.push({x:b.x+19+(q%3)*13,y:b.y+24+Math.floor(q/3)*11,gun:weapon(kind),owner:null});}}}
 for(let i=0;i<25;i++){const p=streetPoint(),kind=i<2?'motorcycle':i===3?'armored':i===14?'motorcycle':i===18?'motorcycle':'car';w.cars.push(makeVehicle(p.x,p.y,kind));}
  // Rare military vehicle appears only with an escalated alert; not a free early-game weapon.
  w.landmarks=[{x:122,y:122,name:'СТАРЫЙ КВАРТАЛ'},{x:607,y:618,name:'ЦЕНТРАЛЬНАЯ ПЛОЩАДЬ'},{x:1765,y:460,name:'СКЛАДЫ'},{x:1120,y:1258,name:'СЕВЕРНЫЙ ПАРК'}];
 for(let i=0;i<Math.floor(info.n/26);i++){let p=streetPoint();w.tree.push({x:p.x+rnd(14,40),y:p.y+rnd(-23,23),s:rnd(9,18)});}
-indexWalls();rebuildNav();
- for(const a of w.persons){const q=nearestFree(a.x,a.y,'human');a.x=q.x;a.y=q.y;a.tx=q.x;a.ty=q.y;}
+indexWalls();rebuildNav();computeCityAccess();
+ for(const a of w.persons){const q=nearestCityAccess(a.x,a.y);a.x=q.x;a.y=q.y;a.tx=q.x;a.ty=q.y;}
  for(const car of w.cars){const q=nearestRoad(car.x,car.y);car.x=q.x;car.y=q.y;}
  placeDynamicSites(w,seed);
  cam.x=w.w*.5;cam.y=w.h*.5;cam.z=.78;return w;}
@@ -156,7 +162,8 @@ let lastSound=0;function sound(freq=220,t=.05,kind='sawtooth'){if(performance.no
 function blood(x,y,n=8,col='#993e3c'){for(let i=0;i<n;i++)world.particles.push({x,y,vx:rnd(-45,45),vy:rnd(-55,30),life:rnd(.35,.9),max:.9,size:rnd(1,3),color:col,gravity:45});}
 function cloud(x,y,radius,life,kind='spore'){world.clouds.push({x,y,r:radius,life,max:life,kind});}
 function fire(x,y,n=18){world.fires.push({x,y,life:rnd(7,16),r:rnd(14,25)});for(let i=0;i<n;i++)world.particles.push({x,y,vx:rnd(-60,60),vy:rnd(-90,20),life:rnd(.4,1.8),max:1.8,size:rnd(2,6),color:rand()<.6?'#faae4b':'#d85441',gravity:-35});}
-function toZombie(h,primary=false){if(!world||h.dead)return;h.dead=true;h.hp=0;h.infecting=false;if(h.gun){world.guns.push({x:h.x,y:h.y,gun:h.gun});h.gun=null;}let type='normal',v=rand();
+function detachVehicle(h){if(!h||!h.inCar)return;const c=h.inCar;if(c.driver===h)c.driver=null;const i=c.passengers.indexOf(h);if(i>=0)c.passengers.splice(i,1);h.inCar=null;}
+function toZombie(h,primary=false){if(!world||h.dead)return;detachVehicle(h);h.dead=true;h.hp=0;h.infecting=false;if(h.gun){world.guns.push({x:h.x,y:h.y,gun:h.gun});h.gun=null;}let type='normal',v=rand();
  const elite=perk('eclipse')&&world.infections>0&&world.infections%10===0;
  if(elite)type='armored';
  else if(v<(perk('brood')?.075:.025))type='armored';
@@ -165,8 +172,8 @@ function toZombie(h,primary=false){if(!world||h.dead)return;h.dead=true;h.hp=0;h
  else if(v<(perk('spitter')?.44:.20))type='spitter';
  else if(v<(perk('brood')?.58:.245))type='leaper';
  else if(v<(perk('brood')?.68:.275))type='howler';
- const z={id:uid++,x:h.x,y:h.y,vx:0,vy:0,kind:'zombie',type,hp:type==='armored'?280:type==='brute'?226:type==='runner'?70:type==='leaper'?76:type==='howler'?95:type==='spitter'?92:110,maxHp:type==='armored'?280:type==='brute'?226:110,attack:rnd(.2,.8),tx:h.x+rnd(-70,70),ty:h.y+rnd(-70,70),decision:rnd(.5,2),angle:rnd(0,6.28),step:rnd(0,6),target:null,acid:0,fedUntil:0};world.zombies.push(z);world.infections++;blood(h.x,h.y,12,'#a7504c');sound(75,.23,'triangle');if(perk('chain')&&world.infections<=3){world.buffs.howl=world.time+5;cloud(h.x,h.y,65,3,'scent');}if(primary)announce('ВСПЫШКА НАЧАЛАСЬ',4);}
-function killHuman(h,byZombie){if(h.dead)return;if(byZombie){toZombie(h);}else{h.dead=true;h.hp=0;world.zLost+=0;if(h.gun){world.guns.push({x:h.x,y:h.y,gun:h.gun});h.gun=null;}blood(h.x,h.y,9);} }
+ const z={id:uid++,x:h.x,y:h.y,vx:0,vy:0,kind:'zombie',type,hp:type==='armored'?280:type==='brute'?226:type==='runner'?70:type==='leaper'?76:type==='howler'?95:type==='spitter'?92:110,maxHp:type==='armored'?280:type==='brute'?226:110,attack:rnd(.2,.8),tx:h.x+rnd(-70,70),ty:h.y+rnd(-70,70),decision:rnd(.5,2),angle:rnd(0,6.28),step:rnd(0,6),target:null,acid:0,fedUntil:0};world.zombies.push(z);world.infections++;blood(h.x,h.y,12,'#a7504c');sound(75,.23,'triangle');if(perk('feast')){world.buffs.fury=world.time+1.5;}if(perk('chain')&&world.infections<=3){world.buffs.howl=world.time+5;cloud(h.x,h.y,65,3,'scent');}if(primary)announce('ВСПЫШКА НАЧАЛАСЬ',4);}
+function killHuman(h,byZombie){if(h.dead)return;if(byZombie){toZombie(h);}else{detachVehicle(h);h.dead=true;h.hp=0;world.zLost+=0;if(h.seekCar&&h.seekCar.reserved===h)h.seekCar.reserved=null;if(h.gun){world.guns.push({x:h.x,y:h.y,gun:h.gun});h.gun=null;}blood(h.x,h.y,9);} }
 function killZombie(z){if(z.dead)return;z.dead=true;z.hp=0;if(perk('revival')&&world.zLost%5===4&&!z.reborn){world.reanimate=world.reanimate||[];world.reanimate.push({x:z.x,y:z.y,t:world.time+2.4});}blood(z.x,z.y,10,'#6e864b');world.zLost++;if(perk('corpse'))cloud(z.x,z.y,40,5,'spore');if(perk('volatile')&&!z.reborn&&rand()<.16)cloud(z.x,z.y,65,8,'spore');}
 function nearest(from,arr,rad,pred){let found=null,dd=rad*rad;for(const o of arr){if(o.hp<=0||pred&&!pred(o))continue;const x=o.x-from.x,y=o.y-from.y,s=x*x+y*y;if(s<dd){dd=s;found=o;}}return found;}
 // Nav-grid A*: doors are legal passages for humans (they open them);
@@ -180,13 +187,19 @@ function spatialWalls(x,y){const bucket=world.wallBuckets.get(Math.floor(x/72)+'
 function gateWalkable(g,e){return g.broken||g.openUntil>world.time||(e&&e.kind==='human'&&g.kind==='door');}
 function rebuildNav(){const n=world.nav={cell:12,cols:Math.ceil(world.w/12),rows:Math.ceil(world.h/12),human:null,zombie:null,cost:null};const size=n.cols*n.rows;n.human=new Uint8Array(size);n.zombie=new Uint8Array(size);n.cost=new Uint8Array(size);
  const mark=(o,mode,cost)=>{const margin=4.5,loX=Math.max(0,Math.floor((o.x-margin)/n.cell)),hiX=Math.min(n.cols-1,Math.ceil((o.x+o.w+margin)/n.cell)),loY=Math.max(0,Math.floor((o.y-margin)/n.cell)),hiY=Math.min(n.rows-1,Math.ceil((o.y+o.h+margin)/n.cell));
- for(let iy=loY;iy<=hiY;iy++)for(let ix=loX;ix<=hiX;ix++){const px=ix*n.cell+n.cell/2,py=iy*n.cell+n.cell/2;if(!overlapCircle(px,py,4.5,o))continue;const j=iy*n.cols+ix;if(mode==='solid'){n.human[j]=1;n.zombie[j]=1;}else if(mode==='window'){n.human[j]=1;n.cost[j]=Math.max(9,n.cost[j]);}else if(mode==='door')n.cost[j]=Math.max(3,n.cost[j]);}}
- for(const o of world.solids)mark(o,'solid');for(const g of world.gates)mark(g,g.broken?'door':g.kind);for(const b of world.barriers)if(b.hp>0)mark({x:b.x-12,y:b.y-5,w:24,h:10},'solid');
+ for(let iy=loY;iy<=hiY;iy++)for(let ix=loX;ix<=hiX;ix++){const px=ix*n.cell+n.cell/2,py=iy*n.cell+n.cell/2;if(!overlapCircle(px,py,4.5,o))continue;const j=iy*n.cols+ix;if(mode==='solid'){n.human[j]=1;n.zombie[j]=1;}else if(mode==='barrier'){n.human[j]=1;n.cost[j]=Math.max(13,n.cost[j]);}else if(mode==='window'){n.human[j]=1;n.cost[j]=Math.max(9,n.cost[j]);}else if(mode==='door')n.cost[j]=Math.max(3,n.cost[j]);}}
+ for(const o of world.solids)mark(o,'solid');for(const g of world.gates)mark(g,g.broken?'door':g.kind);for(const b of world.barriers)if(b.hp>0)mark({x:b.x-12,y:b.y-5,w:24,h:10},'barrier');
  world.navVersion++;
 }
 function navIndex(x,y){const n=world.nav;return clamp(Math.floor(y/n.cell),0,n.rows-1)*n.cols+clamp(Math.floor(x/n.cell),0,n.cols-1);}
 function navClear(a,b,kind){const n=world.nav,map=kind==='human'?n.human:n.zombie;const d=dst(a.x,a.y,b.x,b.y),steps=Math.max(1,Math.ceil(d/5));for(let i=1;i<=steps;i++){const k=i/steps,x=a.x+(b.x-a.x)*k,y=a.y+(b.y-a.y)*k;if(map[navIndex(x,y)])return false;for(const wall of spatialWalls(x,y)){if((wall.kind==='door'||wall.kind==='window')&&(wall.broken||kind==='human'&&wall.kind==='door'))continue;if(overlapCircle(x,y,5.25,wall))return false;}for(const barricade of world.barriers)if(barricade.hp>0&&Math.abs(x-barricade.x)<17&&Math.abs(y-barricade.y)<10)return false;}return true;}
 function nearestFree(x,y,kind='zombie'){const n=world.nav,map=n[kind],cx=clamp(Math.floor(x/n.cell),1,n.cols-2),cy=clamp(Math.floor(y/n.cell),1,n.rows-2);let best=null,score=Infinity;for(let rad=0;rad<=12;rad++){for(let dy=-rad;dy<=rad;dy++)for(let dx=-rad;dx<=rad;dx++){if(rad>0&&Math.abs(dx)!==rad&&Math.abs(dy)!==rad)continue;const xx=cx+dx,yy=cy+dy;if(xx<1||yy<1||xx>=n.cols-1||yy>=n.rows-1||map[yy*n.cols+xx])continue;const px=xx*n.cell+n.cell/2,py=yy*n.cell+n.cell/2,dist=(px-x)**2+(py-y)**2;if(dist<score&&navClear({x:px,y:py},{x:px+.01,y:py+.01},kind)){best={x:px,y:py};score=dist;}}if(best)return best;}return {x:clamp(x,12,world.w-12),y:clamp(y,12,world.h-12)};}
+function computeCityAccess(){const w=world,n=w.nav,seen=new Uint8Array(n.cols*n.rows),queue=new Int32Array(n.cols*n.rows);let head=0,tail=0;
+for(const rx of w.roadsX)for(const ry of w.roadsY){const id=navIndex(rx.at+rx.w/2,ry.at+ry.w/2);if(!n.zombie[id]&&!seen[id]){seen[id]=1;queue[tail++]=id;}}
+while(head<tail){const id=queue[head++],x=id%n.cols,y=(id/n.cols)|0;for(const step of [1,-1,n.cols,-n.cols]){const to=id+step;if(to<0||to>=seen.length||seen[to]||n.zombie[to]||step===1&&x===n.cols-1||step===-1&&x===0)continue;seen[to]=1;queue[tail++]=to;}}
+w.navReach=seen;w.navAudit=tail;return tail;}
+function nearestCityAccess(x,y){const w=world,n=w.nav;if(!Number.isFinite(x)||!Number.isFinite(y)){w.badPositions=(w.badPositions||0)+1;return nearestFree(w.w*.5,w.h*.5,'human');}if(w.navReach&&w.navReach[navIndex(x,y)]&&!n.human[navIndex(x,y)])return nearestFree(x,y,'human');
+let best=null,bs=Infinity;for(let rad=0;rad<24;rad++){const ix=clamp(Math.floor(x/n.cell),1,n.cols-2),iy=clamp(Math.floor(y/n.cell),1,n.rows-2);for(let dy=-rad;dy<=rad;dy++)for(let dx=-rad;dx<=rad;dx++){if(rad&&Math.abs(dx)!==rad&&Math.abs(dy)!==rad)continue;const xx=ix+dx,yy=iy+dy,id=yy*n.cols+xx;if(xx<1||xx>=n.cols-1||yy<1||yy>=n.rows-1||n.human[id]||!w.navReach[id])continue;const px=xx*n.cell+n.cell/2,py=yy*n.cell+n.cell/2,ds=(px-x)**2+(py-y)**2;if(ds<bs){best={x:px,y:py};bs=ds;}}if(best)return best;}return nearestFree(nearestRoad(x,y).x,nearestRoad(x,y).y,'human');}
 function nearestRoad(x,y){let best=null,d=Infinity;for(const r of world.roadsX){const xx=r.at+r.w/2,dis=Math.abs(xx-x);if(dis<d){best={x:xx,y:clamp(y,13,world.h-13)};d=dis;}}for(const r of world.roadsY){const yy=r.at+r.w/2,dis=Math.abs(yy-y);if(dis<d){best={x:clamp(x,13,world.w-13),y:yy};d=dis;}}return best;}
 function reachableWander(e,radius=130){const kind=e.kind;for(let i=0;i<18;i++){const x=clamp(e.x+rnd(-radius,radius),9,world.w-9),y=clamp(e.y+rnd(-radius,radius),9,world.h-9);if(world.nav[kind][navIndex(x,y)])continue;if(i<8&&!navClear(e,{x,y},kind))continue;return {x,y};}const r=rnd(30,90),a=rnd(0,Math.PI*2);return nearestFree(e.x+Math.cos(a)*r,e.y+Math.sin(a)*r,kind);}
 
@@ -255,9 +268,25 @@ function approachTarget(e,goal,sp,dt){if(!goal)return;if(!world.nav){move(e,goal
  if(e.stuck>.5){e.navNoDirect=world.time+2.2;e.navUntil=-1;e.navPath=null;}
 }
 
-function updateHuman(h,dt){if(h.hp<=0)return;h.attack=Math.max(0,h.attack-dt);if(h.gun)h.gun.cooldown=Math.max(0,h.gun.cooldown-dt);
+
+// Local cooperation is resource-limited: medicine, ammunition and barricade material
+// must already exist in the city. Each support action has a visible gameplay effect.
+function assistHuman(h){if(!world||h.hp<=0)return;h.helpCooldown=.85+rnd(0,.5);
+ const friends=nearby(h,53,'human').filter(a=>a!==h&&a.hp>0&&!a.inCar);
+ if(h.role==='medic'&&h.medkits>0){const patient=friends.filter(a=>a.hp<48).sort((a,b)=>a.hp-b.hp)[0];if(patient&&dst(h.x,h.y,patient.x,patient.y)<28){patient.hp=Math.min(70,patient.hp+26);patient.panic=Math.max(0,patient.panic-.35);h.medkits--;h.helpCooldown=4;world.humanAid++;cloud(patient.x,patient.y,14,.6,'scent');return;}}
+ if(h.role==='organizer'&&friends.length>=2){for(const a of friends){if(a.panic>0)a.panic=Math.max(0,a.panic-.18);if(!a.gun&&a.role==='civilian')a.group=h.group;}world.humanAid++;h.helpCooldown=4.1;}
+ if(h.role==='police'||h.role==='fighter'){if(h.gun&&h.gun.ammo>9){const ally=friends.find(a=>a.gun&&a.gun.key===h.gun.key&&a.gun.ammo<=4);if(ally){const n=Math.min(6,h.gun.ammo-5);h.gun.ammo-=n;ally.gun.ammo+=n;world.humanAid++;h.helpCooldown=4;}}}
+ if(h.role==='organizer'&&h.supplies>0&&world.alarm>38&&world.eventResources.materials>0&&nearby(h,145,'zombie').length){
+  const p=nearestRoad(h.x,h.y),b={x:p.x+rnd(-18,18),y:p.y+rnd(-18,18),hp:105,barbed:false,builders:1};
+  if(!world.barriers.some(o=>dst(o.x,o.y,b.x,b.y)<65)&&!world.gates.some(g=>dst(g.x+g.w/2,g.y+g.h/2,b.x,b.y)<34)&&!world.sites.some(site=>dst(site.x,site.y,b.x,b.y)<35)){
+   world.barriers.push(b);h.supplies--;world.eventResources.materials--;world.humanAid++;rebuildNav();h.helpCooldown=8;}
+ }
+}
+
+function updateHuman(h,dt){if(h.hp<=0)return;h.helpCooldown=Math.max(0,(h.helpCooldown||0)-dt);h.attack=Math.max(0,h.attack-dt);if(h.gun)h.gun.cooldown=Math.max(0,h.gun.cooldown-dt);
 if(h.sick>0){h.sick-=dt;h.vx*=.94;h.vy*=.94;h.step+=dt*1.2;if(h.sick<3.3&&!perk('patient')){h.mode='sick';h.panic=1;}if(h.sick<=0){toZombie(h,h===world.first);return;}if(difficulty===2&&h.sick<4)for(const n of nearby(h,80,'human')){if(n!==h&&n.sick<=0)n.panic=Math.min(2,n.panic+.14*dt);}return;}
 if(h.inCar)return;
+if(h.helpCooldown<=0)assistHuman(h);
 const enemy=nearby(h,h.gun?.key==='sniper'?330:220,'zombie').filter(z=>z.hp>0).sort((a,b)=>distance(h,a)-distance(h,b))[0];const danger=enemy?distance(h,enemy):999;
 if(enemy){h.panic=clamp(h.panic+dt*(danger<60?2:1),0,2.5);for(const n of nearby(h,55,'human')){if(perk('echo'))n.panic=Math.max(n.panic,h.panic*.8);}}
 else h.panic=Math.max(0,h.panic-dt*.14);
@@ -275,7 +304,7 @@ if(danger<gun.range*.65){move(h,h.x+(h.x-enemy.x),h.y+(h.y-enemy.y),42+h.fitness
 if(enemy&&danger<155){h.mode='flee';const allies=nearby(h,100,'human').filter(a=>a!==h&&a.hp>0&&a.sick<=0);let fx=h.x+(h.x-enemy.x)*2,fy=h.y+(h.y-enemy.y)*2;
 if((h.role==='organizer'||h.group%3===0)&&allies.length){const n=allies[0];fx=fx*.75+n.x*.25;fy=fy*.75+n.y*.25;}
 approachTarget(h,{x:fx,y:fy},(43+h.fitness*17+(h.fitness>.94?19:0))*(difficulty===0?.94:1),dt);return;}
-h.decision-=dt;if(h.decision<=0){h.decision=rnd(1.6,5);h.mode='wander';const ar=world.buildings.filter(b=>dst(h.x,h.y,buildingEntrance(b).x,buildingEntrance(b).y)<180);if(world.alarm>24&&rand()<.36&&ar.length){const b=ar[irnd(ar.length)];const enter=buildingEntrance(b);h.tx=enter.x;h.ty=enter.y;h.mode='hide';}else if(!h.gun&&world.alarm>17&&rand()<.36){const g=world.guns.find(g=>dst(h.x,h.y,g.x,g.y)<125);if(g){h.tx=g.x;h.ty=g.y;h.mode='loot';}else{h.tx=h.x+rnd(-140,140);h.ty=h.y+rnd(-130,130);}}else{h.tx=h.x+rnd(-125,125);h.ty=h.y+rnd(-110,110);}}
+h.decision-=dt;if(h.decision<=0){h.decision=rnd(1.6,5);h.mode='wander';const ar=world.buildings.filter(b=>dst(h.x,h.y,buildingEntrance(b).x,buildingEntrance(b).y)<180);if(world.alarm>24&&rand()<.36&&ar.length){const b=ar[irnd(ar.length)];const enter=buildingEntrance(b);h.tx=enter.x;h.ty=enter.y;h.mode='hide';}else if(!h.gun&&world.alarm>17&&rand()<.49){const g=world.guns.find(g=>dst(h.x,h.y,g.x,g.y)<190&&!world.nav.human[navIndex(g.x,g.y)]);if(g){h.tx=g.x;h.ty=g.y;h.mode='loot';}else{h.tx=h.x+rnd(-140,140);h.ty=h.y+rnd(-130,130);}}else{h.tx=h.x+rnd(-125,125);h.ty=h.y+rnd(-110,110);}}
 // Individual drivers choose a physical free vehicle using the threat-aware decision above.
 approachTarget(h,{x:h.tx,y:h.ty},h.mode==='hide'?45:27+h.fitness*6,dt);
 // Hospitals heal living humans from finite reserves.
@@ -283,26 +312,34 @@ if(h.hp<46){const b=world.buildings.find(b=>b.meds>0&&b.type==='hospital'&&h.x>b
 }
 function nearby(e,rad,kind){const arr=kind==='human'?world.persons:world.zombies,cell=world.gridCell,grid=kind==='human'?world.humanGrid:world.zombieGrid;if(!grid)return [];const ix=Math.floor(e.x/cell),iy=Math.floor(e.y/cell),s=Math.ceil(rad/cell),out=[];for(let x=ix-s;x<=ix+s;x++)for(let y=iy-s;y<=iy+s;y++){const bucket=grid.get(x+','+y);if(bucket)for(const a of bucket){if(Math.abs(a.x-e.x)<rad&&Math.abs(a.y-e.y)<rad)out.push(a);}}return out;}
 function makeGrid(){world.gridCell=85;const h=new Map(),z=new Map();for(const [arr,grid] of [[world.persons,h],[world.zombies,z]])for(const a of arr){if(a.hp<=0)continue;const key=Math.floor(a.x/85)+','+Math.floor(a.y/85);if(!grid.has(key))grid.set(key,[]);grid.get(key).push(a);}world.humanGrid=h;world.zombieGrid=z;}
-function updateZombie(z,dt){if(z.hp<=0)return;z.attack=Math.max(0,z.attack-dt);z.decision-=dt;z.acid-=dt;let senses=perk('scent')?238:165;if(perk('climb'))senses+=45;if(world.buffs.howl>world.time)senses*=2.15;if(z.type==='spitter')senses+=55;const target=nearby(z,senses,'human').filter(h=>h.hp>0&&h.sick<=0).sort((a,b)=>distance(z,a)-distance(z,b))[0];let speed=z.type==='runner'?107:z.type==='leaper'?98:z.type==='brute'?40:z.type==='armored'?44:z.type==='spitter'?57:z.type==='howler'?61:70;if(perk('pursuit')&&target)speed*=1.18;if(world.buffs.fury>world.time)speed*=1.8;if(perk('hive')&&world.infections>=12)speed*=1.14;if(perk('conduit')&&world.zombies.length>=20)speed*=1.09;if(perk('adapt')&&z.fedUntil>world.time)speed*=1.18;if(perk('pack')&&nearby(z,40,'zombie').length>2)speed*=1.17;
-if(target){z.target=target;let dd=distance(z,target);if(z.type==='howler'&&dd<180&&z.acid<=0){z.acid=9;world.buffs.howl=world.time+2.4;cloud(z.x,z.y,42,.8,'scent');}if(z.type==='leaper'&&dd>25&&dd<84&&z.acid<=0&&navClear(z,target,'zombie')){z.acid=4.8;z.vx=(target.x-z.x)/dd*180;z.vy=(target.y-z.y)/dd*180;}if(z.type==='spitter'&&dd<135&&dd>42&&z.acid<=0){world.bullets.push({x:z.x,y:z.y,vx:(target.x-z.x)/dd*195,vy:(target.y-z.y)/dd*195,life:.85,damage:21,owner:'acid',r:3});z.acid=2.5;}
+function findRoadPatrol(z){const r=world.roadsX[irnd(world.roadsX.length)],q=world.roadsY[irnd(world.roadsY.length)];return nearestFree(r.at+r.w*.5+rnd(-12,12),q.at+q.w*.5+rnd(-12,12),'zombie');}
+function updateZombie(z,dt){if(z.hp<=0)return;z.attack=Math.max(0,z.attack-dt);z.decision-=dt;z.acid-=dt;let senses=perk('scent')?238:165;if(perk('climb'))senses+=45;if(world.buffs.howl>world.time)senses*=2.15;if(z.type==='spitter')senses+=55;let target=nearby(z,senses,'human').filter(h=>h.hp>0&&h.sick<=0).sort((a,b)=>distance(z,a)-distance(z,b))[0];
+// A late-game citywide scent sweep prevents isolated survivors from remaining invisible forever.
+// Different horde members search different living targets, including occupied vehicles.
+if(!target&&world.livingTargets?.length&&(world.livingTargets.length<=55||perk('signal')||perk('ambassador')||world.time>230)){
+ const list=world.livingTargets;const idx=(Math.imul(z.id,17)+Math.floor(world.time/26))%list.length;
+ target=list[idx];if(!target||target.hp<=0)target=list.find(h=>h.hp>0)||null;
+}
+if(target&&target.inCar&&target.inCar.dead)detachVehicle(target);let speed=z.type==='runner'?107:z.type==='leaper'?98:z.type==='brute'?40:z.type==='armored'?44:z.type==='spitter'?57:z.type==='howler'?61:70;if(z.slowUntil>world.time)speed*=.27;if(perk('pursuit')&&target)speed*=1.18;if(world.buffs.fury>world.time)speed*=1.8;if(perk('hive')&&world.infections>=12)speed*=1.14;if(perk('conduit')&&world.zombies.length>=20)speed*=1.09;if(perk('nocturne')&&world.alarm>70)speed*=1.15;if(perk('adapt')&&z.fedUntil>world.time)speed*=1.18;if(perk('pack')&&nearby(z,40,'zombie').length>2)speed*=1.17;
+if(target){z.target=target;let dd=distance(z,target);if(target.inCar&&!target.inCar.dead){const c=target.inCar;if(dd<24&&z.attack<=0){c.hp-=z.type==='brute'?45:z.type==='armored'?38:22;z.attack=.56;}if(c.hp<=0)destroyVehicle(c);else if(dd<22){z.step+=dt*3;return;}}if(z.type==='howler'&&dd<180&&z.acid<=0){z.acid=9;world.buffs.howl=world.time+2.4;cloud(z.x,z.y,42,.8,'scent');}if(z.type==='leaper'&&dd>25&&dd<84&&z.acid<=0&&navClear(z,target,'zombie')){z.acid=4.8;z.vx=(target.x-z.x)/dd*180;z.vy=(target.y-z.y)/dd*180;}if(z.type==='spitter'&&dd<135&&dd>42&&z.acid<=0){world.bullets.push({x:z.x,y:z.y,vx:(target.x-z.x)/dd*195,vy:(target.y-z.y)/dd*195,life:.85,damage:21,owner:'acid',r:3});z.acid=2.5;}
 if(dd<12+((z.type==='brute'||z.type==='armored')?5:0)&&z.attack<=0){const power=(z.type==='brute'?60:z.type==='armored'?43:28)*(world.buffs.fury>world.time?1.6:1)*(perk('pack')&&nearby(z,42,'zombie').length>2?1.24:1);target.hp-=power;z.attack=z.type==='runner'||z.type==='leaper'?.47:.77;blood(target.x,target.y,4);if(target.hp<=0){killHuman(target,true);if(perk('adapt')){z.hp=Math.min(z.maxHp||105,z.hp+29);z.fedUntil=world.time+7;}}}else if(z.type!=='spitter'||dd>80)approachTarget(z,target,speed,dt);else z.step+=dt*4;
-}else{z.target=null;if(z.decision<=0||dst(z.x,z.y,z.tx,z.ty)<12){z.decision=rnd(1,4);const walk=reachableWander(z,165);z.tx=walk.x;z.ty=walk.y;}approachTarget(z,{x:z.tx,y:z.ty},speed*.58,dt);}
+}else{z.target=null;if(z.decision<=0||dst(z.x,z.y,z.tx,z.ty)<12){z.decision=rnd(1,4);const broad=world.time>65&&rand()<.30;const walk=broad?findRoadPatrol(z):reachableWander(z,165);z.tx=walk.x;z.ty=walk.y;}approachTarget(z,{x:z.tx,y:z.ty},speed*.58,dt);}
 // Destroy doors and window glass a few blows at a time; hunt toward real openings.
 if(z.attack<=0){let gate=spatialWalls(z.x,z.y).find(g=>(g.kind==='door'||g.kind==='window')&&!g.broken&&g.openUntil<=world.time&&dst(z.x,z.y,g.x+g.w/2,g.y+g.h/2)<21);
-if(gate){const power=(z.type==='brute'?56:z.type==='armored'?42:22)*(perk('climb')&&gate.kind==='window'?2:1)*(perk('siege')?1.75:1)*(perk('conduit')&&world.zombies.length>=20?1.55:1);
+if(gate){const power=(z.type==='brute'?56:z.type==='armored'?42:22)*(perk('climb')&&gate.kind==='window'?2:1)*(perk('siege')?1.75:1)*(perk('sappers')?1.4:1)*(perk('conduit')&&world.zombies.length>=20?1.55:1);
 gate.hp-=power;z.attack=z.type==='brute'?.50:.64;blood(gate.x+gate.w/2,gate.y+gate.h/2,gate.kind==='window'?9:5,gate.kind==='window'?'#8cb7cb':'#9a8264');sound(gate.kind==='window'?530:108,.10);
 if(gate.hp<=0){gate.broken=true;rebuildNav();if(perk('glass')&&gate.kind==='window')world.buffs.howl=world.time+2;announce(gate.kind==='window'?'СТЕКЛО РАЗБИТО':'ДВЕРЬ ВЫБИТА',1.2);}}}
 // Nearby shelters and radio relays can be destroyed if zombies have no visible prey.
  if(!target&&z.attack<=0)for(const site of world.sites||[])if(site.hp>0&&dst(z.x,z.y,site.x,site.y)<17){site.hp-=z.type==='brute'?44:23;z.attack=.75;if(site.hp<=0)destroySite(site);break;}
 // Destructible, physical barricades block the horde.
 for(const b of world.barriers){if(b.hp<=0)continue;if(dst(z.x,z.y,b.x,b.y)<27){z.hp-=dt*(b.barbed?13:0);if(z.hp<=0)killZombie(z);if(z.attack<=0){b.hp-=z.type==='brute'?68:perk('siege')?35:19;z.attack=.57;blood(b.x,b.y,5,'#a68a69');}break;}}
-for(const c of world.cars){if(c.dead||!c.driver)continue;if(dst(z.x,z.y,c.x,c.y)<24&&z.attack<=0){c.hp-=z.type==='brute'?35:perk('siege')?25:11;z.attack=.8;}}
+for(const c of world.cars){if(c.dead||!c.driver)continue;if(dst(z.x,z.y,c.x,c.y)<24&&z.attack<=0){c.hp-=z.type==='brute'?35:perk('iron')?52:perk('siege')?25:11;z.attack=.8;}}
 }
 function shoot(h,z){if(!h.gun||!z)return;const def=GUNS[h.gun.key];if(h.gun.ammo<=0)return;h.gun.ammo--;let dir=Math.atan2(z.y-h.y,z.x-h.x),spread=h.gun.key==='shotgun'?.44:h.gun.key==='smg'?.12:.055;
-for(let i=0;i<def.bullets;i++){let a=dir+rnd(-spread,spread),v=def.speed;world.bullets.push({x:h.x+Math.cos(a)*9,y:h.y+Math.sin(a)*9,vx:Math.cos(a)*v,vy:Math.sin(a)*v,damage:def.dmg,life:def.range/v,owner:'human',r:2,grenade:h.gun.key==='grenade',molotov:h.gun.key==='molotov'});}h.angle=dir;world.particles.push({x:h.x+Math.cos(dir)*10,y:h.y+Math.sin(dir)*10,vx:0,vy:0,life:.09,max:.09,size:5,color:'#fff9b6',gravity:0});sound(h.gun.key==='shotgun'?90:330,.04);}
+for(let i=0;i<def.bullets;i++){let a=dir+rnd(-spread,spread),v=def.speed;world.bullets.push({x:h.x+Math.cos(a)*9,y:h.y+Math.sin(a)*9,vx:Math.cos(a)*v,vy:Math.sin(a)*v,damage:def.dmg,life:def.range/v,owner:'human',r:2,grenade:h.gun.key==='grenade',molotov:h.gun.key==='molotov',flame:h.gun.key==='flamethrower'||h.gun.key==='flare',stun:h.gun.key==='taser'});}h.angle=dir;world.particles.push({x:h.x+Math.cos(dir)*10,y:h.y+Math.sin(dir)*10,vx:0,vy:0,life:.09,max:.09,size:5,color:'#fff9b6',gravity:0});sound(h.gun.key==='shotgun'?90:330,.04);}
 function explode(x,y,r=49,damage=80){fire(x,y,26);cloud(x,y,r*.8,2.6,'smoke');sound(47,.38);for(const z of world.zombies){if(z.hp<=0)continue;const d=dst(x,y,z.x,z.y);if(d<r){z.hp-=damage*(1-d/r*.5);if(z.hp<=0)killZombie(z);}}for(const h of world.persons){if(h.hp<=0)continue;const d=dst(x,y,h.x,h.y);if(d<r){h.hp-=damage*(1-d/r*.5);if(h.hp<=0)killHuman(h,false);}}for(const c of world.cars){if(!c.dead&&dst(x,y,c.x,c.y)<r){c.hp-=damage*1.4;}}for(const b of world.barriers){if(dst(x,y,b.x,b.y)<r)b.hp-=damage;}}
-function updateProjectiles(dt){for(let i=world.bullets.length-1;i>=0;i--){const b=world.bullets[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;let hit=false;if(b.owner==='human'){for(const z of nearby(b,11,'zombie'))if(z.hp>0&&dst(z.x,z.y,b.x,b.y)<8){z.hp-=b.damage;blood(z.x,z.y,3,'#829b57');if(z.hp<=0)killZombie(z);hit=true;break;}}else{for(const h of nearby(b,12,'human'))if(h.hp>0&&dst(h.x,h.y,b.x,b.y)<9){h.hp-=b.damage;h.panic=2;blood(h.x,h.y,4);if(h.hp<=0)killHuman(h,false);hit=true;break;}}
-if(hit||b.life<=0||b.x<0||b.y<0||b.x>world.w||b.y>world.h){if(b.molotov){fire(b.x,b.y,34);cloud(b.x,b.y,32,3.2,'smoke');}if(b.grenade)explode(b.x,b.y,50,90);if(b.owner==='acid')cloud(b.x,b.y,28,3,'spore');world.bullets.splice(i,1);}}
+function updateProjectiles(dt){for(let i=world.bullets.length-1;i>=0;i--){const b=world.bullets[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;let hit=false;if(b.owner==='human'){for(const z of nearby(b,11,'zombie'))if(z.hp>0&&dst(z.x,z.y,b.x,b.y)<8){z.hp-=b.damage;if(b.stun)z.slowUntil=world.time+1.8;if(b.flame&&rand()<.26)fire(z.x,z.y,3);blood(z.x,z.y,3,'#829b57');if(z.hp<=0)killZombie(z);hit=true;break;}}else{for(const h of nearby(b,12,'human'))if(h.hp>0&&dst(h.x,h.y,b.x,b.y)<9){h.hp-=b.damage;h.panic=2;blood(h.x,h.y,4);if(h.hp<=0)killHuman(h,false);hit=true;break;}}
+if(hit||b.life<=0||b.x<0||b.y<0||b.x>world.w||b.y>world.h){if(b.flame&&rand()<.4)fire(b.x,b.y,4);if(b.molotov){fire(b.x,b.y,34);cloud(b.x,b.y,32,3.2,'smoke');}if(b.grenade)explode(b.x,b.y,50,90);if(b.owner==='acid')cloud(b.x,b.y,28,3,'spore');world.bullets.splice(i,1);}}
 }
 function roadNodes(){if(world.roadNodes)return world.roadNodes;
  const out=[];for(let ix=0;ix<world.roadsX.length;ix++)for(let iy=0;iy<world.roadsY.length;iy++)out.push({ix,iy,x:world.roadsX[ix].at+world.roadsX[ix].w/2,y:world.roadsY[iy].at+world.roadsY[iy].w/2});
@@ -325,8 +362,9 @@ function vehicleHit(c,x,y){const rad=c.kind==='tank'?16:c.kind==='motorcycle'?6:
  for(const b of world.barriers)if(b.hp>0&&Math.abs(x-b.x)<rad+12&&Math.abs(y-b.y)<rad+5){if(c.kind==='tank'){b.hp-=14;return false;}return true;}
  for(const other of world.cars)if(other!==c&&!other.dead&&dst(x,y,other.x,other.y)<rad+(other.kind==='tank'?18:other.kind==='motorcycle'?7:11))return true;
  return false;}
+function destroyVehicle(c){if(!c||c.dead)return;c.dead=true;for(const h of [c.driver,...c.passengers]){if(!h||h.hp<=0)continue;detachVehicle(h);h.hp-=c.kind==='tank'?48:34;if(h.hp<=0)killHuman(h,false);else{const pos=nearestFree(c.x+rnd(-24,24),c.y+rnd(-24,24),'human');h.x=pos.x;h.y=pos.y;h.panic=2;}}c.driver=null;c.passengers=[];explode(c.x,c.y,c.kind==='tank'?76:52,70);}
 function updateCars(dt){for(const c of world.cars){if(c.dead)continue;
- if(c.hp<=0){c.dead=true;if(c.driver){c.driver.inCar=null;c.driver.hp-=32;c.driver=null;}for(const h of c.passengers){h.inCar=null;h.hp-=32;}explode(c.x,c.y,c.kind==='tank'?76:52,70);continue;}
+ if(c.hp<=0){destroyVehicle(c);continue;}
  if(!c.driver||c.driver.hp<=0){if(c.driver){c.driver.inCar=null;c.driver=null;}continue;}
  c.fuel-=dt;
  if(c.fuel<=0){c.driver.inCar=null;c.driver.seekCar=null;c.driver=null;continue;}
@@ -351,28 +389,92 @@ function updateCars(dt){for(const c of world.cars){if(c.dead)continue;
  if(c.kind!=='motorcycle'&&c.passengers.length<(c.kind==='tank'?3:2)&&rand()<dt*.25){const h=nearby(c,14,'human').find(h=>h.hp>0&&!h.inCar&&h!==c.driver&&h.panic>1);if(h){c.passengers.push(h);h.inCar=c;}}
  }
 }
-function updateGovernment(dt){const w=world,n=w.persons.filter(a=>a.hp>0).length;let dead=1-n/w.popStart,activity=w.zombies.filter(z=>z.hp>0).length/w.popStart;let desired=clamp(dead*95+Math.min(28,activity*80)+Math.min(15,w.time/50)+(difficulty===2?16:difficulty===0?-15:0),0,100);
+
+// One-shot director cards: 20 real, alarm-gated events; no invisible population creation.
+// min is the alarm threshold, tier controls presentation and frequency.
+const CITY_EVENTS=[
+ {id:'rumor',min:6,tier:1,name:'СЛУХИ О ЗАРАЖЕНИИ'},
+ {id:'neighbors',min:9,tier:1,name:'СОСЕДИ ОРГАНИЗУЮТСЯ'},
+ {id:'aid',min:13,tier:1,name:'ВОЛОНТЁРСКАЯ ПОМОЩЬ'},
+ {id:'signal',min:16,tier:1,name:'РАДИО ПЕРЕХВАТИЛО СИГНАЛ'},
+ {id:'traffic',min:19,tier:1,name:'ПРОБКА НА МАГИСТРАЛИ'},
+ {id:'looting',min:23,tier:2,name:'НАБЕГ НА ОРУЖЕЙНЫЙ СКЛАД'},
+ {id:'crash',min:26,tier:2,name:'ДОРОЖНАЯ АВАРИЯ'},
+ {id:'blackout',min:30,tier:2,name:'ОТКЛЮЧЕНИЕ ЭЛЕКТРИЧЕСТВА'},
+ {id:'medics',min:35,tier:2,name:'ПОЛЕВОЙ МЕДПУНКТ'},
+ {id:'siren',min:39,tier:2,name:'СИРЕНЫ ГОРОДА'},
+ {id:'militia',min:44,tier:2,name:'НАРОДНОЕ ОПОЛЧЕНИЕ'},
+ {id:'checkpoint',min:49,tier:2,name:'БЛОКПОСТЫ НА ДОРОГАХ'},
+ {id:'snipers',min:55,tier:3,name:'СНАЙПЕРСКИЙ ДОЗОР'},
+ {id:'toxic',min:59,tier:3,name:'УТЕЧКА ХИМИКАТОВ'},
+ {id:'evacuation',min:63,tier:3,name:'ЭВАКУАЦИЯ НА ТРАНСПОРТЕ'},
+ {id:'supply',min:67,tier:3,name:'СБРОС ВОЕННЫХ ПРИПАСОВ'},
+ {id:'quarantine',min:72,tier:3,name:'ЖЁСТКИЙ КАРАНТИН'},
+ {id:'drone',min:77,tier:3,name:'РАЗВЕДЫВАТЕЛЬНЫЕ ДРОНЫ'},
+ {id:'artillery',min:83,tier:4,name:'АРТИЛЛЕРИЙСКАЯ ЗАЧИСТКА'},
+ {id:'airstrike',min:91,tier:4,name:'АВИАНАЛЁТ ПО СКОПЛЕНИЯМ'}
+];
+function suppliesNear(x,y,kind){const b=world.buildings.filter(b=>b.type===kind&&b.supplies>0).sort((a,b)=>dst(x,y,a.x,a.y)-dst(x,y,b.x,b.y))[0];return b||null;}
+function choosePoint(){const h=world.persons.filter(h=>h.hp>0&&!h.inCar);return h.length?h[irnd(h.length)]:{x:world.w/2,y:world.h/2};}
+function queueBombardment(x,y,at,damage=98,radius=57){world.eventQueue.push({x,y,t:world.time+at,damage,radius,kind:'bomb'});world.particles.push({x,y,vx:0,vy:0,life:at,max:at,size:7,color:'#ffc875',gravity:0});}
+function eventAction(card){const w=world,h=choosePoint(),safe=()=>nearestCityAccess(h.x+rnd(-55,55),h.y+rnd(-55,55));
+ switch(card.id){
+ case 'rumor':for(const a of w.persons)if(a.hp>0&&rand()<.26)a.panic+=.65;break;
+ case 'neighbors':for(const a of w.persons)if(a.hp>0&&a.role==='organizer'){a.supplies++;a.morale=1.8;}w.eventResources.materials+=2;break;
+ case 'aid':for(const a of w.persons)if(a.hp>0&&a.role==='medic')a.medkits+=2;w.eventResources.medkits+=3;break;
+ case 'signal':for(const a of w.persons)if(a.hp>0&&a.role==='police')a.radio=true;w.buffs.howl=Math.max(w.buffs.howl,w.time+2);break;
+ case 'traffic':for(const c of w.cars)if(c.driver&&rand()<.28)c.fuel=Math.max(5,c.fuel-26);break;
+ case 'looting':{const depot=suppliesNear(h.x,h.y,'armory');if(depot){const num=Math.min(3,depot.supplies);for(let i=0;i<num;i++)w.guns.push({x:depot.x+18+i*12,y:depot.y+16,gun:weapon(['machinepistol','doublebarrel','crossbow'][i])});depot.supplies-=num;}break;}
+ case 'crash':{const c=w.cars.find(c=>!c.dead&&!c.driver&&c.kind==='car');if(c){c.hp=0;destroyVehicle(c);fire(c.x,c.y,8);}break;}
+ case 'blackout':w.blackoutUntil=w.time+55;w.buffs.howl=Math.max(w.buffs.howl,w.time+8);break;
+ case 'medics':for(const b of w.buildings.filter(b=>b.type==='hospital'))b.meds+=3;for(const a of w.persons)if(a.role==='medic'&&a.hp>0)a.medkits+=1;break;
+ case 'siren':for(const a of w.persons)if(a.hp>0)a.panic=Math.min(2.5,a.panic+.4);w.buffs.howl=w.time+7;break;
+ case 'militia':{let supply=w.guns.filter(g=>g.gun?.ammo>0);for(const a of w.persons.filter(a=>a.hp>0&&a.bravery>.5&&!a.gun).slice(0,7)){const item=supply.pop();if(!item)break;a.gun=item.gun;w.guns.splice(w.guns.indexOf(item),1);}break;}
+ case 'checkpoint':{let n=0;for(const road of w.roadsY.slice(1,5)){const at=nearestCityAccess(w.w*.55,road.at+road.w*.5);if(w.barriers.every(b=>dst(b.x,b.y,at.x,at.y)>30)){w.barriers.push({x:at.x,y:at.y,hp:175,barbed:true});n++;}}if(n)rebuildNav();break;}
+ case 'snipers':{const depot=w.buildings.find(b=>b.type==='police');if(depot&&w.reinforcementBudget>0){const q=nearestCityAccess(depot.x-14,depot.y-14);const a=makeReinforcement(q.x,q.y,2);a.gun=weapon('sniper');w.persons.push(a);w.reinforcementBudget--;w.reinforcements++;}break;}
+ case 'toxic':{const f=w.sites.find(s=>s.kind==='fuel'&&s.hp>0);if(f){fire(f.x,f.y,21);cloud(f.x,f.y,75,14,'spore');f.stock=Math.max(0,f.stock-25);}else cloud(h.x,h.y,63,8,'spore');break;}
+ case 'evacuation':for(const c of w.cars.filter(c=>!c.dead&&!c.driver))c.fuel+=36;for(const a of w.persons.filter(h=>h.hp>0&&h.role==='civilian'))a.panic+=.16;break;
+ case 'supply':{const p=nearestCityAccess(w.w*.5,w.h*.47);for(let i=0;i<4;i++)w.guns.push({x:p.x+i*9,y:p.y+4,gun:weapon(['burst','hunting','rifle','flamethrower'][i]),owner:'airdrop'});w.eventResources.materials+=3;break;}
+ case 'quarantine':for(const g of w.gates)if(!g.broken&&g.kind==='door'&&rand()<.16){g.hp+=36;g.maxHp+=36;g.openUntil=0;}break;
+ case 'drone':{const zs=w.zombies.filter(z=>z.hp>0);for(let i=0;i<Math.min(3,zs.length);i++){const z=zs[irnd(zs.length)];w.bullets.push({x:z.x-22,y:z.y-15,vx:150,vy:100,life:.18,damage:30,owner:'human',r:2});}break;}
+ case 'artillery':{const zs=w.zombies.filter(z=>z.hp>0);for(let i=0;i<Math.min(3,zs.length);i++){const z=zs[irnd(zs.length)];queueBombardment(z.x,z.y,2+i*.7,80,43);}break;}
+ case 'airstrike':{const zs=w.zombies.filter(z=>z.hp>0);for(let i=0;i<Math.min(4,zs.length);i++){const z=zs[irnd(zs.length)];queueBombardment(z.x,z.y,3+i*.6,112,63);}break;}
+ }
+}
+function updateEvents(dt){const w=world;
+ for(let i=w.eventQueue.length-1;i>=0;i--){const b=w.eventQueue[i];if(w.time>=b.t){w.eventQueue.splice(i,1);explode(b.x,b.y,b.radius,b.damage);}}
+ w.eventCooldown-=dt;if(w.eventCooldown>0)return;
+ const eligible=CITY_EVENTS.filter(c=>c.min<=w.alarm&&!w.eventHistory.some(x=>x.id===c.id));
+ if(!eligible.length){w.eventCooldown=8;return;}
+ // Choose from the lowest eligible escalation band first, but vary the event and pacing.
+ const min=Math.min(...eligible.map(c=>c.min));const next=eligible.filter(c=>c.min<=min+13);const card=next[irnd(next.length)];
+ w.eventHistory.push({id:card.id,name:card.name,tier:card.tier,at:w.time,alarm:Math.round(w.alarm)});
+ eventAction(card);announce((card.tier>=4?'☢ ':card.tier>=3?'⚠ ':'◆ ')+card.name,6);
+ w.eventCooldown=(card.tier===4?22:card.tier===3?17:12)+rnd(1,5);
+}
+
+function updateGovernment(dt){const w=world,n=w.persons.filter(a=>a.hp>0&&a.original).length;let dead=1-n/w.popStart,activity=w.zombies.filter(z=>z.hp>0).length/w.popStart;let desired=clamp(dead*95+Math.min(28,activity*80)+Math.min(15,w.time/50)+(difficulty===2?16:difficulty===0?-15:0),0,100);
 if(w.first&&w.first.sick>0)desired=difficulty===2&&w.first.sick<4?8:0;
 w.alarm+=(desired-w.alarm)*Math.min(1,dt*.40);const stages=[23,47,69,88];while(w.stage<4&&w.alarm>=stages[w.stage]){w.stage++;const label=['ПОЛИЦИЯ ПОДНЯТА ПО ТРЕВОГЕ','ОМОН ЗАНИМАЕТ ПОЗИЦИИ','ВОЕННЫЕ БЛОКПОСТЫ','ПРОТОКОЛ ЗАЧИСТКИ'][w.stage-1];announce(label,5);if(w.stage>=2)deploy(w.stage);}
-w.riotIn-=dt;if(w.stage>=2&&w.riotIn<=0){deploy(w.stage);w.riotIn=(difficulty===2?21:difficulty===0?65:38);}
+w.riotIn-=dt;if(w.stage>=2&&w.riotIn<=0&&w.reinforcementBudget>0){deploy(w.stage);w.riotIn=(difficulty===2?36:difficulty===0?85:55);}
 // Patrols respond to real alert level; no early SWAT swarms.
-w.patrolIn-=dt;if(w.stage>=1&&w.patrolIn<=0){const b=w.buildings.find(b=>b.type==='police');if(b){const h=makeReinforcement(b.x+b.w/2,b.y+b.h+12,1);w.persons.push(h);}w.patrolIn=36;}
-if(w.stage===4&&rand()<dt*.045&&w.zombies.some(z=>z.hp>0)){const z=w.zombies[irnd(w.zombies.length)];if(z&&z.hp>0){world.particles.push({x:z.x,y:z.y-60,vx:0,vy:60,life:1,max:1,size:5,color:'#ffdfb5',gravity:40});setTimeout(()=>{if(world===w&&phase==='game')explode(z.x,z.y,65,115);},650);}}
+w.patrolIn-=dt;if(w.stage>=1&&w.patrolIn<=0&&w.reinforcementBudget>0){const b=w.buildings.find(b=>b.type==='police');if(b){const q=nearestCityAccess(b.x+b.w/2,b.y+b.h+12);const h=makeReinforcement(q.x,q.y,1);w.persons.push(h);w.reinforcementBudget--;w.reinforcements++;}w.patrolIn=48;}
+// Airstrikes are finite alarm events, never an infinite automatic punishment.
 }
-function makeReinforcement(x,y,level){return {id:uid++,x,y,vx:0,vy:0,role:'police',kind:'human',hp:level===2?130:90,panic:0,bravery:1,group:0,mode:'fight',tx:x,ty:y,decision:.2,attack:0,gun:weapon(level===2?'rifle':'smg'),inCar:null,infecting:false,sick:0,shade:2,angle:0,step:0};}
-function deploy(stage){const w=world;
+function makeReinforcement(x,y,level){return {id:uid++,x,y,vx:0,vy:0,role:'police',kind:'human',hp:level===2?130:90,panic:0,bravery:1,group:0,mode:'fight',tx:x,ty:y,decision:.2,attack:0,gun:weapon(level===2?'rifle':'smg'),inCar:null,infecting:false,sick:0,shade:2,angle:0,step:0,original:false,medkits:0,supplies:0,helpCooldown:0,morale:1};}
+function deploy(stage){const w=world;if(w.reinforcementBudget<=0)return;
  const base=w.buildings.find(b=>b.type==='police'),door=base?buildingEntrance(base):{x:120,y:120};
  const start=nearestFree(clamp(door.x+rnd(-80,80),22,w.w-22),clamp(door.y+rnd(-80,80),22,w.h-22),'human');
- for(let i=0;i<(stage>=3?5:3);i++){
-  const pos=nearestFree(start.x+rnd(-32,32),start.y+rnd(-32,32),'human');
-  w.persons.push(makeReinforcement(pos.x,pos.y,stage>=3?2:1));}
+ for(let i=0;i<Math.min(w.reinforcementBudget,stage>=3?5:3);i++){
+  const pos=nearestCityAccess(start.x+rnd(-32,32),start.y+rnd(-32,32));
+  w.persons.push(makeReinforcement(pos.x,pos.y,stage>=3?2:1));w.reinforcementBudget--;w.reinforcements++;}
  if(stage>=2){let added=0;for(let i=0;i<16&&added<3;i++){
    const x=start.x+rnd(-65,65),y=start.y+rnd(-60,60);
    if(w.nav.human[navIndex(x,y)]||w.barriers.some(o=>dst(x,y,o.x,o.y)<28)||w.cars.some(c=>dst(x,y,c.x,c.y)<30))continue;
    const b={x,y,hp:stage>=3?220:140,barbed:stage>=3};w.barriers.push(b);added++;}if(added)rebuildNav();}
- if(stage>=3){const t=rand()<.22?'tank':'armored',p=nearestRoad(start.x,start.y),car=makeVehicle(p.x,p.y,t);w.cars.push(car);
+ if(stage>=3&&w.reinforcementBudget>0){const t=rand()<.14?'tank':'armored',p=nearestRoad(start.x,start.y),car=makeVehicle(p.x,p.y,t);w.cars.push(car);
   // Government transports arrive with a real driver and finite vehicle health.
-  const soldier=makeReinforcement(car.x,car.y,2);soldier.inCar=car;car.driver=soldier;w.persons.push(soldier);
+  const soldier=makeReinforcement(car.x,car.y,2);soldier.inCar=car;car.driver=soldier;w.persons.push(soldier);w.reinforcementBudget--;w.reinforcements++;
   announce(t==='tank'?'ТАНКИ ПРИБЫЛИ В ГОРОД':'БРОНЕМАШИНЫ ПРИБЫЛИ',3.1);}
  // Supplies are moved from real police/armory storage, not spawned freely in the road.
  if(stage>=2){const depot=w.buildings.find(b=>b.type==='armory'&&b.supplies>0);if(depot){depot.supplies--;const key=['carbine','smg','lmg','shotgun','revolver'][irnd(5)];w.guns.push({x:depot.x+16,y:depot.y+25,gun:weapon(key),owner:'armory'});}}
@@ -383,9 +485,12 @@ else if(id==='fury'&&perk('fury')){world.skills.fury=42;world.buffs.fury=world.t
 else if(id==='spore'&&perk('fog')){world.skills.spore=38;cloud(center.x,center.y,116,12,'spore');announce('СПОРОВОЕ ОБЛАКО');sound(190,.3);}
 else if(id==='breach'&&perk('breach')){world.skills.breach=55;for(const g of world.gates)if(!g.broken&&dst(center.x,center.y,g.x+g.w/2,g.y+g.h/2)<135){g.hp-=150;g.broken=g.hp<=0;}for(const b of world.barriers)if(dst(center.x,center.y,b.x,b.y)<135)b.hp-=90;rebuildNav();cloud(center.x,center.y,135,1.7,'smoke');announce('ПРОБОЙ ОБОРОНЫ');sound(64,.3);}}
 function update(dt){if(!world||phase!=='game'||paused)return;dt*=speed;world.time+=dt;world.pathBudget=world.persons.length+world.zombies.length>500?6:12;world.gridTime=(world.gridTime||0)-dt;if(world.gridTime<=0){makeGrid();world.gridTime=.13;}
+// This census contains real living human objects, never stale counters.
+world.livingTargets=world.persons.filter(a=>a.hp>0&&a.sick<=0);
+if(world.livingTargets.length<=40){world.lateSweep+=dt;if(world.lateSweep>=4){world.lateSweep=0;for(const h of world.livingTargets){if(h.inCar&&!h.inCar.dead){h.x=h.inCar.x;h.y=h.inCar.y;}if(world.nav.human[navIndex(h.x,h.y)]||world.navReach&&!world.navReach[navIndex(h.x,h.y)]){const p=nearestCityAccess(h.x,h.y);if(!h.inCar){h.x=p.x;h.y=p.y;h.navPath=null;}}}}}
 for(const a of world.persons)updateHuman(a,dt);
 for(const z of world.zombies)updateZombie(z,dt);
-updateProjectiles(dt);updateCars(dt);updateClouds(dt);updateSites(dt);updateGovernment(dt);
+updateProjectiles(dt);updateCars(dt);updateClouds(dt);updateSites(dt);updateGovernment(dt);updateEvents(dt);
 if(world.reanimate){for(let i=world.reanimate.length-1;i>=0;i--){const c=world.reanimate[i];if(world.time<c.t)continue;world.reanimate.splice(i,1);const z={id:uid++,x:c.x,y:c.y,vx:0,vy:0,kind:'zombie',type:'normal',hp:46,attack:.7,tx:c.x+9,ty:c.y+9,decision:1,angle:0,step:0,acid:0,reborn:true};world.zombies.push(z);blood(c.x,c.y,7,'#99bc78');}}
 let destroyedBarrier=false;for(let i=world.barriers.length-1;i>=0;i--)if(world.barriers[i].hp<=0){world.barriers.splice(i,1);destroyedBarrier=true;}if(destroyedBarrier)rebuildNav();
 for(let i=world.particles.length-1;i>=0;i--){const p=world.particles[i];p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.gravity*dt;if(p.life<=0)world.particles.splice(i,1);}
@@ -393,11 +498,11 @@ if(world.particles.length>950)world.particles.splice(0,world.particles.length-95
 for(const key in world.skills)world.skills[key]=Math.max(0,world.skills[key]-dt);
 world.persons=world.persons.filter(h=>h.hp>0);world.zombies=world.zombies.filter(z=>z.hp>0);
 let live=world.persons.length,z=world.zombies.length;if(world.first&&world.first.sick>0)z=1;if(world.reanimate&&world.reanimate.length)z=Math.max(1,z);
-if((live===0&&z>0)||(z===0&&live>0&&world.infections>0))finish(live===0);if(world.time>900)finish(false);
+if((live===0&&z>0)||(z===0&&live>0&&world.infections>0))finish(live===0);if(world.time>1800&&z>0&&live>0){announce('НАЗЕМНАЯ ЗАЧИСТКА: ОБЕ СТОРОНЫ ПРОДОЛЖАЮТ БОЙ',6);}
 clock+=dt;if(clock>.24){updateHud();clock=0;}}
 function finish(won){if(!world||phase!=='game')return;phase='end';world.round=false;const earned=Math.floor(world.infections*(won?2.2:1.1)*(difficulty===2?1.55:difficulty===0?.8:1)+Math.min(20,world.zLost*.2));coins+=earned;save();S('resultTitle',won?'ГОРОД ПАЛ':'ЗАРАЗА ПОДАВЛЕНА');S('resultSubtitle',won?'Город больше не принадлежит живым.':'Последний заражённый уничтожен. Эпидемия остановлена.');S('scoreInfected',world.infections);S('scoreKills',world.zLost);S('scoreTime',fmtTime(world.time));S('scoreEarned','◈ '+earned);show('hud',false);show('result',true);sound(won?82:190,.4);}
 function fmtTime(t){return Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0')}
-function updateHud(force=false){if(!world)return;S('living',world.persons.length);S('undead',world.zombies.length);S('fallen',world.infections);S('alarm',Math.round(world.alarm)+'%');$('alertbar').style.width=world.alarm+'%';let now=world.events.filter(e=>e.until>world.time).slice(-1)[0];S('notice',now?now.text:'');if(world.first&&world.first.sick>0)S('tip',world.first.sick>3?'Первые симптомы через '+Math.max(0,Math.ceil(world.first.sick-3))+' сек.':'Пациент ноль превращается...');else S('tip','Перетаскивай карту • масштаб двумя пальцами • способности действуют в центре экрана');for(const key of ['howl','fury','spore','breach']){const b=document.querySelector('[data-skill="'+key+'"]');b.style.display=(key==='howl'&&!perk('howl')||key==='fury'&&!perk('fury')||key==='spore'&&!perk('fog')||key==='breach'&&!perk('breach'))?'none':'';b.disabled=world.skills[key]>0;b.querySelector('em').style.height=clamp(world.skills[key]/(key==='howl'?28:key==='fury'?42:key==='breach'?55:38),0,1)*100+'%';}}
+function updateHud(force=false){if(!world)return;const civilians=world.persons.filter(h=>h.hp>0&&h.original).length;const responders=world.persons.filter(h=>h.hp>0&&!h.original).length;S('living',civilians+responders);S('populationBreakdown','ГОРОЖАНЕ '+civilians+' / '+world.popStart+' · ПОДКРЕПЛЕНИЕ '+responders+' · РЕЗЕРВ '+world.reinforcementBudget+' · СОБЫТИЯ '+world.eventHistory.length+'/20');S('undead',world.zombies.length);S('fallen',world.infections);S('alarm',Math.round(world.alarm)+'%');$('alertbar').style.width=world.alarm+'%';let now=world.events.filter(e=>e.until>world.time).slice(-1)[0];S('notice',now?now.text:'');if(world.first&&world.first.sick>0)S('tip',world.first.sick>3?'Первые симптомы через '+Math.max(0,Math.ceil(world.first.sick-3))+' сек.':'Пациент ноль превращается...');else S('tip',world.persons.length<=45?'ПОСЛЕДНИЕ ВЫЖИВШИЕ: точки людей подсвечены на миникарте · стая охотится по всему городу':'Перетаскивай карту • масштаб двумя пальцами • способности действуют в центре экрана');for(const key of ['howl','fury','spore','breach']){const b=document.querySelector('[data-skill="'+key+'"]');b.style.display=(key==='howl'&&!perk('howl')||key==='fury'&&!perk('fury')||key==='spore'&&!perk('fog')||key==='breach'&&!perk('breach'))?'none':'';b.disabled=world.skills[key]>0;b.querySelector('em').style.height=clamp(world.skills[key]/(key==='howl'?28:key==='fury'?42:key==='breach'?55:38),0,1)*100+'%';}}
 function worldScreen(x,y){return {x:(x-cam.x)*cam.z+CW/2,y:(y-cam.y)*cam.z+CH/2}}
 function screenWorld(x,y){return {x:(x-CW/2)/cam.z+cam.x,y:(y-CH/2)/cam.z+cam.y}}
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),Math.ceil(w),Math.ceil(h));}
@@ -405,7 +510,7 @@ function line(x,y,X,Y,c,w=1){ctx.strokeStyle=c;ctx.lineWidth=w;ctx.beginPath();c
 function circle(x,y,rad,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(Math.round(x),Math.round(y),Math.max(.5,rad),0,Math.PI*2);ctx.fill();}
 function visible(x,y,pad=60){const p=worldScreen(x,y);return p.x>-pad&&p.x<CW+pad&&p.y>-pad&&p.y<CH+pad;}
 function worldRender(){if(!world)return;ctx.save();ctx.translate(Math.round(CW/2-cam.x*cam.z),Math.round(CH/2-cam.y*cam.z));ctx.scale(cam.z,cam.z);const z=cam.z;const left=cam.x-CW/(z*2)-60,top=cam.y-CH/(z*2)-60,right=cam.x+CW/(z*2)+60,bottom=cam.y+CH/(z*2)+60;
-rect(0,0,world.w,world.h,'#536a55');
+rect(0,0,world.w,world.h,world.blackoutUntil>world.time?'#354f48':'#536a55');
 // Uneven city plan: alleys, arterial roads, cobblestone squares and green courtyards.
 for(const f of world.features){if(f.x+f.w<left||f.x>right||f.y+f.h<top||f.y>bottom)continue;drawDistrict(f);}
 for(const road of world.roadsX){const x=road.at,w=road.w;if(x+w<left||x>right)continue;rect(x,0,w,world.h,'#67706a');rect(x+3,0,w-6,world.h,road.w>47?'#343d43':'#3d4446');if(w>40){for(let y=12;y<world.h;y+=37){if(y>top-38&&y<bottom+38)rect(x+w/2-1,y,2,14,'#b7b080');}}}
@@ -472,7 +577,7 @@ ctx.fillStyle='#10191b77';ctx.beginPath();ctx.ellipse(a.x+2,a.y+4,radius+2,3,0,0
 if(a.kind==='zombie'){rect(a.x-3,a.y-2+bob,2,2,'#e5484d');rect(a.x+2,a.y-2+bob,2,2,'#e5484d');if(a.type==='armored'){rect(a.x-7,a.y-7+bob,14,3,'#85978c');rect(a.x-6,a.y+6+bob,12,2,'#364e41');}if(a.type==='howler')circle(a.x,a.y+5+bob,3,'#cde5b6');if(a.type==='leaper')rect(a.x-5,a.y+5+bob,9,2,'#e6cc85');if(a.type==='brute')rect(a.x-11,a.y-2+bob,4,7,'#6da185');if(a.type==='spitter')rect(a.x-2,a.y+3+bob,5,2,'#edc2f3');}
 else{rect(a.x-2,a.y-3+bob,4,3,'#f0dbc1');if(a.role==='police')rect(a.x-4,a.y-5+bob,8,2,'#283947');if(a.gun){const ax=a.angle;line(a.x+Math.cos(ax)*4,a.y+Math.sin(ax)*4+bob,a.x+Math.cos(ax)*13,a.y+Math.sin(ax)*13+bob,'#1e2527',3);line(a.x+Math.cos(ax)*7,a.y+Math.sin(ax)*7+bob,a.x+Math.cos(ax)*13,a.y+Math.sin(ax)*13+bob,'#c2b6a2',1);}if(a.panic>1)rect(a.x-2,a.y-12+bob,4,4,'#f8cc6b');if(a.infecting&&a.sick<4)circle(a.x,a.y-13+bob,3,'#9ea853');}
 }
-function drawMini(){const ww=100,hh=70,x=CW-ww-11,y=CH-hh-13;if(phase==='menu'||phase==='end')return;rect(x-2,y-2,ww+4,hh+4,'#0b141add');rect(x,y,ww,hh,'#3e4e48');for(const b of world.buildings)rect(x+b.x/world.w*ww,y+b.y/world.h*hh,Math.max(1,b.w/world.w*ww),Math.max(1,b.h/world.h*hh),'#68716a');for(const z of world.zombies){if(z.hp>0)rect(x+z.x/world.w*ww,y+z.y/world.h*hh,2,2,'#c9f16b');}for(const h of world.persons){if(h.hp>0&&h.role==='police')rect(x+h.x/world.w*ww,y+h.y/world.h*hh,1,1,'#9ecee8');}rect(x+cam.x/world.w*ww,y+cam.y/world.h*hh,3,3,'#ffeded');}
+function drawMini(){const ww=100,hh=70,x=CW-ww-11,y=CH-hh-13;if(phase==='menu'||phase==='end')return;rect(x-2,y-2,ww+4,hh+4,'#0b141add');rect(x,y,ww,hh,'#3e4e48');for(const b of world.buildings)rect(x+b.x/world.w*ww,y+b.y/world.h*hh,Math.max(1,b.w/world.w*ww),Math.max(1,b.h/world.h*hh),'#68716a');for(const z of world.zombies){if(z.hp>0)rect(x+z.x/world.w*ww,y+z.y/world.h*hh,2,2,'#c9f16b');}for(const h of world.persons){if(h.hp<=0)continue;if(world.persons.length<=45)rect(x+h.x/world.w*ww-1,y+h.y/world.h*hh-1,3,3,'#ffd077');else if(h.role==='police')rect(x+h.x/world.w*ww,y+h.y/world.h*hh,1,1,'#9ecee8');}rect(x+cam.x/world.w*ww,y+cam.y/world.h*hh,3,3,'#ffeded');}
 function loop(now){let dt=last?clamp((now-last)/1000,0,.05):.016;last=now;if(world&&(phase==='game'||phase==='select')){if(phase==='game')update(dt);render();}else if(phase==='end'){render();}else{if(!world)newWorld(0,menuSeed);render();}requestAnimationFrame(loop);}
 function render(){ctx.clearRect(0,0,CW,CH);ctx.fillStyle='#425b4c';ctx.fillRect(0,0,CW,CH);worldRender();}
 function pointFromEvent(e){const box=canvas.getBoundingClientRect();return {x:(e.clientX-box.left)/box.width*CW,y:(e.clientY-box.top)/box.height*CH};}
@@ -491,6 +596,6 @@ $('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'▶':'Ⅱ'
 $('speed').onclick=()=>{speed=speed===1?2:speed===2?3:1;S('speed','×'+speed);};
 for(const b of document.querySelectorAll('[data-skill]'))b.onclick=()=>useSkill(b.dataset.skill);
 window.handleBack=()=>{if(phase==='select'){$('backSelect').click();}else if(phase==='game'){paused=!paused;$('pause').textContent=paused?'▶':'Ⅱ';}else if(phase==='end'){$('again').click();}};
-window.__outbreakDebug={get nav(){return world?.nav},findPath,collisionPoint,approachTarget,updateZombie,nearestFree,reachableWander,vehicleHit,updateCars,updateHuman,updateGovernment,updateSites,makeVehicle,nearestRoad,PERKS,get phase(){return phase},get world(){return world},get coins(){return coins},startPick,selectPatient,update,finish,newWorld,renderMenu};
+window.__outbreakDebug={get nav(){return world?.nav},findPath,collisionPoint,approachTarget,updateZombie,nearestFree,reachableWander,vehicleHit,updateCars,updateHuman,updateGovernment,updateSites,updateEvents,choosePoint,eventAction,CITY_EVENTS,computeCityAccess,nearestCityAccess,assistHuman,deploy,killHuman,toZombie,killZombie,makeReinforcement,makeVehicle,nearestRoad,PERKS,get phase(){return phase},get world(){return world},get coins(){return coins},startPick,selectPatient,update,finish,newWorld,renderMenu};
 renderMenu();requestAnimationFrame(loop);
 })();
