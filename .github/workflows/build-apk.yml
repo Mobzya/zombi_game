@@ -20,6 +20,8 @@ jobs:
           if test -f payload.b64; then
             base64 --decode payload.b64 | tar xJ
           fi
+      - name: Upgrade prototype Android target to API 35
+        run: sed -i 's/targetSdk 28/targetSdk 35/' app/build.gradle
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
