@@ -5,7 +5,7 @@ on:
   pull_request:
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -15,11 +15,6 @@ jobs:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@v4
-      - name: Apply v0.2 source archive (one-time import)
-        run: |
-          if test -f outbreak_v02_payload.b64; then
-            base64 --decode outbreak_v02_payload.b64 | tar xJ
-          fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -59,15 +54,3 @@ jobs:
           name: OUTBREAK-optimized-test-APK
           path: app/build/outputs/apk/release/OUTBREAK-v0.2-optimized-test.apk
           if-no-files-found: error
-
-      - name: Materialize editable v0.2 source files
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/navigation-districts-v0-2'
-        run: |
-          if test -f outbreak_v02_payload.b64; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git rm outbreak_v02_payload.b64
-            git add app/src/main/assets app/build.gradle test/smoke.cjs README.md
-            git commit -m 'feat: materialize v0.2 navigation and district game source'
-            git push origin HEAD:feature/navigation-districts-v0-2
-          fi
