@@ -1,17 +1,32 @@
-# OUTBREAK: Zero Patient · v0.2.0
+# OUTBREAK: Zero Patient — v0.3 Ironbridge
 
-Offline pixel-art Android outbreak simulation, built with Canvas and a fullscreen WebView.
+**Android first-playable prototype**: fully offline Canvas pixel-art outbreak strategy, Java Android WebView wrapper, no backend or art asset downloads.
 
-## v0.2
-- Varied, uneven city geometry: narrow alleys, broad roads, parks, squares, yards, marketplaces, parking and mixed-use buildings.
-- Grid-based A* navigation plus steering, broadphase wall collision index, path caching and pathfinding budget.
-- Destructible doors and windows, with damage stages, splinters / glass particles; civilians open doors while zombies bash through them. Barricades block movement and can be destroyed.
-- More realistic pursuit: civilians differ in stamina, most are slower than normal zombies; sprinting is rare.
-- Separate active and passive evolution branches, escalating costs and game-changing passive mutations, new active breach ability.
-- Automated smoke and navigation tests and 1000-agent performance probe.
+## Ironbridge — one authored city
 
-## Build
-Run `node test/smoke.cjs` and `gradle :app:assembleDebug`. CI builds debug and test-signed optimized APKs. Test signatures are disposable and not intended for Play Store releases.
+A **single fixed 2170 × 1560 city with 290 residents** and three independently adjustable difficulties. Curated arterial roads, service alleys, large plazas, market stalls, residential courts, industry, parks, parking lots, pharmacies, police posts, clinics, garages and armories. Building footprints and dedicated entry doors/windows are consistent across rounds. Dynamic radio, fuel, shelter, medic and cache event locations vary between sessions in walkable locations, and have real effects and finite resources.
 
-## Controls
-Choose map and difficulty, upgrade genome, select patient zero. Drag / pinch to navigate; tap unlocked active skills at the bottom. Progression saves locally.
+## AI / navigation
+
+- A* grid search with corner constraints, physical circle-versus-rectangle collision, spatial wall indexing, diagonal-swept visibility, steering on slide collisions, waypoint invalidation and stuck recovery.
+- When no humans are detectable, zombies pick traversable local waypoints and patrol rather than push into walls.
+- Zombies damage doors/windows through multiple attacks. Humans can open doors and seek shelter.
+- Distinct resident personalities: police, brave fighters, medics, organizers, drivers, fleeing civilians. Select threatened residents reserve and run toward a real free vehicle, board and drive.
+- 25 initial cars, motorcycles and one armored vehicle; road intersection navigation, collision, fuel consumption, ramming and picking up passengers. Police support may deploy armored vehicles and rarely a tank after an escalated alert.
+
+## Combat & progression
+
+- **10 physical weapon variants**, including revolver, carbine, light machine gun, sniper rifle, molotov, grenade, pistol, SMG, shotgun and assault rifle. Ammunition is finite and weapons drop on death. Emergency caches draw from physical armory reserves.
+- Regular, runner, brute, spitter, leaper, howler and armored infected. Rare mutations can occur without upgrades; passive mutation purchases increase odds and add tactical effects.
+- **26 evolution upgrades** separated into active skills and passive mutational milestones: coordinated packs, body adaptation, breaking windows, volatile death, elite outbreak and others.
+- 3 difficulties change threat response, raids and citizen aggression. Both epidemic victory (no living residents) and military victory (last infected destroyed, including awaiting reanimations) are supported.
+
+## Verification and caveats
+
+Automated Node smoke/integration tests validate fixed city geometry, 55 human navigation traversals, 25 zombie patrols, progressive gate destruction, vehicle routing, motorcycles/tanks and both end conditions through live combat. CI installs SDK 35, Gradle 8.10.2 and Java 17, then builds Debug and test-signed optimized APKs.
+
+This is an **experimental alpha**: the collision/steering and transport model are arcade approximations; not a full rigid-body engine. Tests verify sampled scenarios but cannot guarantee every possible arrangement is free of stalls. Performance may vary by phone and game speed. GitHub Actions signs with disposable test keystore, not a production signing certificate. Installing over a previous APK can require uninstall, which may clear local saves.
+
+## Install/build
+
+The GitHub Actions workflow publishes a zipped `.apk` artifact. For manual builds with Android SDK 35 and JDK 17: `gradle :app:assembleDebug`. Open APK on an Android 7+ phone and allow sideload if asked. This app does not request network permissions.

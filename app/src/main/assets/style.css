@@ -9,3 +9,5 @@
 .perk.legendary.ready{border-color:#e0bb7b;box-shadow:inset 3px 0 #cdb66c}
 .perk.legendary .tierlabel{color:#d4bc82}
 @media(max-width:720px){.rightpanel{padding:2vh 2vw}.perktabs button{padding:8px 5px}.perk{padding:8px;min-height:70px}.tierlabel{font-size:8px}.key{display:none}}
+
+.mapfeature{border:1px solid #6c8b77;background:#203a36;padding:13px 16px;margin-bottom:8px}.mapfeature b{display:block;color:#d8e4ab;font-size:clamp(12px,1.2vw,17px)}.mapfeature small{display:block;margin-top:5px;color:#a6c3bc;line-height:1.5;font-size:clamp(10px,.95vw,13px)}
