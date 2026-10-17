@@ -37,7 +37,7 @@ function perk(id){return !!owned[id]}
 function renderMenu(){S('coins','◈ '+coins);S('wallet','◈ '+coins);
 for(const b of document.querySelectorAll('[data-perk-tab]'))b.classList.toggle('chosen',b.dataset.perkTab===perkTab);
 const node=$('perks');node.innerHTML='';let shown=0;
-PERKS.forEach(([id,symbol,title,desc,price,req])=>{const active=symbol==='✦';if((perkTab==='active')!==active)return;
+PERKS.slice().sort((a,b)=>a[4]-b[4]).forEach(([id,symbol,title,desc,price,req])=>{const active=symbol==='✦';if((perkTab==='active')!==active)return;
 const have=perk(id),locked=req&&!perk(req),afford=coins>=price,b=document.createElement('button');
 const tier=price<30?'I · НАЧАЛЬНАЯ':price<60?'II · ЭВОЛЮЦИЯ':price<105?'III · МУТАЦИЯ':price<150?'IV · ДОМИНИРОВАНИЕ':'V · КАТАСТРОФА';
 b.className='perk '+(have?'owned':afford&&!locked?'ready':'')+' tier'+(price>=105?' legendary':'');
@@ -152,7 +152,7 @@ function findPath(a,b,kind){const n=world.nav,width=n.cols,block=kind==='human'?
  const path=[];let anchor={x:a.x,y:a.y};for(let i=0;i<nodes.length;){let furthest=i;for(let j=i+1;j<nodes.length&&j<i+12;j++){if(navClear(anchor,nodes[j],kind))furthest=j;else break;}path.push(nodes[furthest]);anchor=nodes[furthest];i=furthest+1;}return path;
 }
 function collisionPoint(x,y,ox,oy,rad,entity){const w=world,margin=rad||5;x=clamp(x,margin,w.w-margin);y=clamp(y,margin,w.h-margin);
- function hits(xx,yy){for(const o of spatialWalls(xx,yy)){if((o.kind==='door'||o.kind==='window')&&gateWalkable(o,entity))continue;if(overlapCircle(xx,yy,margin,o))return o;}
+ function hits(xx,yy){for(const o of spatialWalls(xx,yy)){if((o.kind==='door'||o.kind==='window')&&gateWalkable(o,entity))continue;if(overlapCircle(xx,yy,margin,o)){const midX=o.x+o.w/2,midY=o.y+o.h/2;if(overlapCircle(ox,oy,margin,o)&&dst(xx,yy,midX,midY)>dst(ox,oy,midX,midY))continue;return o;}}
  for(const b of w.barriers)if(b.hp>0&&Math.abs(xx-b.x)<12+margin&&Math.abs(yy-b.y)<5+margin)return b;
  for(const c of w.cars)if(!c.dead&&c!==entity?.inCar&&dst(xx,yy,c.x,c.y)<15+margin)return c;return null;}
  let hit=hits(x,y);if(!hit)return {x,y,hit:null};let X=x,Y=oy;if(hits(X,Y)){X=ox;Y=y;if(hits(X,Y)){X=ox;Y=oy;}}return {x:X,y:Y,hit};}
