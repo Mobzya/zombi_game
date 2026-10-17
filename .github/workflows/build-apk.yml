@@ -1,0 +1,65 @@
+name: Build Zombie Outbreak APK
+on:
+  push:
+    branches: ['feature/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack first source bundle
+        run: |
+          if test -f payload.b64; then
+            base64 --decode payload.b64 | tar xJ
+          fi
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Test JavaScript gameplay
+        run: |
+          node --check app/src/main/assets/game.js
+          node test/smoke.cjs
+      - name: Build APKs
+        run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
+      - name: Sign optimized release with disposable test key
+        run: |
+          keytool -genkeypair -v -keystore /tmp/outbreak-test.keystore -alias outbreak -keyalg RSA -keysize 2048 -validity 30 -storepass android123 -keypass android123 -dname 'CN=OUTBREAK Test,O=Prototype,C=US'
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -p -f 4 app/build/outputs/apk/release/app-release-unsigned.apk /tmp/app-aligned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/outbreak-test.keystore --ks-key-alias outbreak --ks-pass pass:android123 --key-pass pass:android123 --out app/build/outputs/apk/release/OUTBREAK-v0.1-optimized-test.apk /tmp/app-aligned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify app/build/outputs/apk/release/OUTBREAK-v0.1-optimized-test.apk
+      - name: Verify debug APK
+        run: |
+          test -s app/build/outputs/apk/debug/app-debug.apk
+          unzip -t app/build/outputs/apk/debug/app-debug.apk | tail -1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OUTBREAK-debug-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OUTBREAK-optimized-test-APK
+          path: app/build/outputs/apk/release/OUTBREAK-v0.1-optimized-test.apk
+          if-no-files-found: error
+      - name: Materialize real editable source files on feature branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/outbreak-prototype-v0-1'
+        run: |
+          if test -f payload.b64; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git rm payload.b64
+            git add -A
+            git commit -m 'feat: materialize editable Android game sources'
+            git push origin HEAD:feature/outbreak-prototype-v0-1
+          fi
