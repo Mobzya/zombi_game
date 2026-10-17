@@ -5,7 +5,7 @@ on:
   pull_request:
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -15,18 +15,11 @@ jobs:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@v4
-      - name: Unpack first source bundle
-        run: |
-          if test -f payload.b64; then
-            base64 --decode payload.b64 | tar xJ
-          fi
-      - name: Upgrade prototype Android target to API 35
-        run: sed -i 's/targetSdk 28/targetSdk 35/' app/build.gradle
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - name: Verify SDK and install platform if missing
+      - name: Ensure Android SDK 35
         run: |
           SDKMGR=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)
           test -n "$SDKMGR"
@@ -34,21 +27,22 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
-      - name: Test JavaScript gameplay
+      - name: Test gameplay logic
         run: |
           node --check app/src/main/assets/game.js
           node test/smoke.cjs
-      - name: Build APKs
+      - name: Build debug and optimized release
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
-      - name: Sign optimized release with disposable test key
+      - name: Test-sign optimized release
         run: |
-          keytool -genkeypair -v -keystore /tmp/outbreak-test.keystore -alias outbreak -keyalg RSA -keysize 2048 -validity 30 -storepass android123 -keypass android123 -dname 'CN=OUTBREAK Test,O=Prototype,C=US'
+          keytool -genkeypair -v -keystore /tmp/outbreak-test.keystore -alias outbreak -keyalg RSA -keysize 2048 -validity 3650 -storepass android123 -keypass android123 -dname 'CN=OUTBREAK Test,O=Prototype,C=US'
           "$ANDROID_HOME/build-tools/35.0.0/zipalign" -p -f 4 app/build/outputs/apk/release/app-release-unsigned.apk /tmp/app-aligned.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/outbreak-test.keystore --ks-key-alias outbreak --ks-pass pass:android123 --key-pass pass:android123 --out app/build/outputs/apk/release/OUTBREAK-v0.1-optimized-test.apk /tmp/app-aligned.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify app/build/outputs/apk/release/OUTBREAK-v0.1-optimized-test.apk
-      - name: Verify debug APK
+      - name: Verify APKs
         run: |
           test -s app/build/outputs/apk/debug/app-debug.apk
+          test -s app/build/outputs/apk/release/OUTBREAK-v0.1-optimized-test.apk
           unzip -t app/build/outputs/apk/debug/app-debug.apk | tail -1
       - uses: actions/upload-artifact@v4
         with:
@@ -60,14 +54,3 @@ jobs:
           name: OUTBREAK-optimized-test-APK
           path: app/build/outputs/apk/release/OUTBREAK-v0.1-optimized-test.apk
           if-no-files-found: error
-      - name: Materialize real editable source files on feature branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/outbreak-prototype-v0-1'
-        run: |
-          if test -f payload.b64; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git rm payload.b64
-            git add -A
-            git commit -m 'feat: materialize editable Android game sources'
-            git push origin HEAD:feature/outbreak-prototype-v0-1
-          fi
