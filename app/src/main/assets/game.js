@@ -60,7 +60,10 @@ let touching=(Math.abs(x-left)<rad+4&&y>top&&y<bottom)||(Math.abs(x-right)<rad+4
 const crossing=((ox<left&&x>=left)||(ox>right&&x<=right)||(oy<top&&y>=top)||(oy>bottom&&y<=bottom));
 if(touching||crossing&&!oldInside&&x>left&&x<right&&y>top&&y<bottom){if(Math.abs(ox-x)>Math.abs(oy-y)){x=ox;y=clamp(y,margin,w.h-margin)}else{y=oy;x=clamp(x,margin,w.w-margin)}}
 if(oldInside){for(const f of b.desks){if(x>f.x-rad&&x<f.x+f.w+rad&&y>f.y-rad&&y<f.y+f.h+rad){x=ox;y=oy;break;}}}
-}return {x,y};}
+}
+if(!ignoreWalls){for(const b of w.barriers)if(b.hp>0&&Math.abs(x-b.x)<17+margin&&Math.abs(y-b.y)<6+margin)return {x:ox,y:oy};
+for(const c of w.cars)if(!c.dead&&dst(x,y,c.x,c.y)<16+margin)return {x:ox,y:oy};}
+return {x,y};}
 function move(entity,tx,ty,sp,dt,wall=true){let dx=tx-entity.x,dy=ty-entity.y,dd=Math.hypot(dx,dy);if(dd<1)return;entity.angle=Math.atan2(dy,dx);let vx=dx/dd*sp,vy=dy/dd*sp;entity.vx+=(vx-entity.vx)*Math.min(1,dt*6);entity.vy+=(vy-entity.vy)*Math.min(1,dt*6);let p=collisionPoint(entity.x+entity.vx*dt,entity.y+entity.vy*dt,entity.x,entity.y,5,!wall);if(p.x===entity.x&&p.y===entity.y){entity.decision=0; // choose a doorway when a building separates target
 let b=world.buildings.find(b=>entity.x>=b.x-22&&entity.x<=b.x+b.w+22&&entity.y>=b.y-22&&entity.y<=b.y+b.h+22);
 if(b){entity.tx=b.doorX;entity.ty=b.y+b.h+((entity.y<b.y+b.h/2)?15:-17);}else{entity.tx=entity.x+rnd(-55,55);entity.ty=entity.y+rnd(-55,55);}}
@@ -95,7 +98,7 @@ if(target){z.target=target;let dd=distance(z,target);if(z.type==='spitter'&&dd<1
 if(dd<12+((z.type==='brute')?5:0)&&z.attack<=0){target.hp-=(z.type==='brute'?60:28)*(world.buffs.fury>world.time?1.6:1);z.attack=z.type==='runner'?.47:.77;blood(target.x,target.y,4);if(target.hp<=0)killHuman(target,true);}else if(z.type!=='spitter'||dd>80)approachTarget(z,target,speed,dt);else z.step+=dt*4;
 }else{z.target=null;if(z.decision<=0||dst(z.x,z.y,z.tx,z.ty)<12){z.decision=rnd(1,4);z.tx=clamp(z.x+rnd(-140,140),5,world.w-5);z.ty=clamp(z.y+rnd(-140,140),5,world.h-5);}approachTarget(z,{x:z.tx,y:z.ty},speed*.58,dt);}
 // Destructible, physical barricades block the horde.
-for(const b of world.barriers){if(b.hp<=0)continue;if(dst(z.x,z.y,b.x,b.y)<18){z.hp-=dt*(b.barbed?13:0);if(z.hp<=0)killZombie(z);if(z.attack<=0){b.hp-=z.type==='brute'?68:perk('siege')?35:19;z.attack=.57;blood(b.x,b.y,5,'#a68a69');}break;}}
+for(const b of world.barriers){if(b.hp<=0)continue;if(dst(z.x,z.y,b.x,b.y)<27){z.hp-=dt*(b.barbed?13:0);if(z.hp<=0)killZombie(z);if(z.attack<=0){b.hp-=z.type==='brute'?68:perk('siege')?35:19;z.attack=.57;blood(b.x,b.y,5,'#a68a69');}break;}}
 for(const c of world.cars){if(c.dead||!c.driver)continue;if(dst(z.x,z.y,c.x,c.y)<24&&z.attack<=0){c.hp-=z.type==='brute'?35:perk('siege')?25:11;z.attack=.8;}}
 }
 function shoot(h,z){if(!h.gun||!z)return;const def=GUNS[h.gun.key];if(h.gun.ammo<=0)return;h.gun.ammo--;let dir=Math.atan2(z.y-h.y,z.x-h.x),spread=h.gun.key==='shotgun'?.44:h.gun.key==='smg'?.12:.055;
@@ -104,7 +107,7 @@ function explode(x,y,r=49,damage=80){fire(x,y,26);cloud(x,y,r*.8,2.6,'smoke');so
 function updateProjectiles(dt){for(let i=world.bullets.length-1;i>=0;i--){const b=world.bullets[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;let hit=false;if(b.owner==='human'){for(const z of nearby(b,11,'zombie'))if(z.hp>0&&dst(z.x,z.y,b.x,b.y)<8){z.hp-=b.damage;blood(z.x,z.y,3,'#829b57');if(z.hp<=0)killZombie(z);hit=true;break;}}else{for(const h of nearby(b,12,'human'))if(h.hp>0&&dst(h.x,h.y,b.x,b.y)<9){h.hp-=b.damage;h.panic=2;blood(h.x,h.y,4);if(h.hp<=0)killHuman(h,false);hit=true;break;}}
 if(hit||b.life<=0||b.x<0||b.y<0||b.x>world.w||b.y>world.h){if(b.grenade)explode(b.x,b.y,50,90);if(b.owner==='acid')cloud(b.x,b.y,28,3,'spore');world.bullets.splice(i,1);}}
 }
-function updateCars(dt){for(const c of world.cars){if(c.dead)continue;if(c.hp<=0){c.dead=true;c.driver&&(c.driver.inCar=null,c.driver.hp-=35);for(const h of c.passengers){h.inCar=null;h.hp-=35;}explode(c.x,c.y,55,70);continue;}if(c.driver&&c.driver.hp>0){c.fuel-=dt;c.t-=dt;if(c.fuel<=0){c.driver.inCar=null;c.driver=null;continue;}if(c.t<=0){c.angle=irnd(4)*Math.PI/2;c.t=rnd(1.5,4);}const xx=c.x+Math.cos(c.angle)*105*dt,yy=c.y+Math.sin(c.angle)*105*dt;if(xx<12||yy<12||xx>world.w-12||yy>world.h-12){c.angle+=Math.PI;c.t=2;}else{c.x=xx;c.y=yy;}
+function updateCars(dt){for(const c of world.cars){if(c.dead)continue;if(c.hp<=0){c.dead=true;c.driver&&(c.driver.inCar=null,c.driver.hp-=35);for(const h of c.passengers){h.inCar=null;h.hp-=35;}explode(c.x,c.y,55,70);continue;}if(c.driver&&c.driver.hp>0){c.fuel-=dt;c.t-=dt;if(c.fuel<=0){c.driver.inCar=null;c.driver=null;continue;}if(c.t<=0){c.angle=irnd(4)*Math.PI/2;c.t=rnd(1.5,4);}const xx=c.x+Math.cos(c.angle)*105*dt,yy=c.y+Math.sin(c.angle)*105*dt;if(xx<12||yy<12||xx>world.w-12||yy>world.h-12){c.angle+=Math.PI;c.t=2;}else{const blocked=world.buildings.some(b=>xx>b.x-12&&xx<b.x+b.w+12&&yy>b.y-12&&yy<b.y+b.h+12)||world.barriers.some(b=>b.hp>0&&dst(xx,yy,b.x,b.y)<24);if(blocked){c.angle+=Math.PI/2;c.t=1.5;}else{c.x=xx;c.y=yy;}}
 c.driver.x=c.x;c.driver.y=c.y;for(const h of c.passengers){h.x=c.x;h.y=c.y;}
 for(const z of nearby(c,15,'zombie')){if(z.hp>0&&dst(c.x,c.y,z.x,z.y)<13){z.hp-=110;blood(z.x,z.y,10,'#6e8a52');if(z.hp<=0)killZombie(z);c.hp-=4;}}
 if(c.passengers.length<2&&rand()<dt*.4){const h=nearby(c,13,'human').find(h=>h.hp>0&&!h.inCar&&h!==c.driver&&h.panic>1);if(h){c.passengers.push(h);h.inCar=c;}}
