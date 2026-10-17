@@ -24,3 +24,16 @@ city.zombies.push(z);game.updateZombie(z,.8);assert.ok(gate.hp<gate.maxHp&&gate.
 for(let i=0;i<8;i++){z.x=cx+(gate.side==='W'?-13:gate.side==='E'?13:0);z.y=cy+(gate.side==='N'?-13:gate.side==='S'?13:0);z.attack=0;game.updateZombie(z,.1);}assert.ok(gate.broken,'zombies break the door');
 assert.ok(game.PERKS.filter(p=>p[1]!=='✦').some(p=>p[4]>=140),'unique, expensive passive upgrades');
 console.log('PASS: varied districts, A* paths, progressively destructible doors, progression tiers');
+
+// Real steering test: people must be able to leave doors in all four directions,
+// including cases where an agent starts overlapping furniture.
+const passageWorld=game.newWorld(0,888),bySide={};
+for(const b of passageWorld.buildings){const o=b.openings.find(o=>o.kind==='door');if(o&&b.w>55&&b.h>55&&!bySide[o.side])bySide[o.side]={b,o};}
+assert.deepEqual(Object.keys(bySide).sort(),['E','N','S','W']);
+for(const side of ['N','S','E','W']){
+ const {b,o}=bySide[side],agent={x:b.x+b.w/2,y:b.y+b.h/2,kind:'human',vx:0,vy:0,step:0};
+ const out=side==='S'?{x:o.at,y:b.y+b.h+45}:side==='N'?{x:o.at,y:b.y-45}:side==='E'?{x:b.x+b.w+45,y:o.at}:{x:b.x-45,y:o.at};
+ for(let i=0;i<320;i++){passageWorld.time+=.04;passageWorld.pathBudget=16;game.approachTarget(agent,out,54,.04);}
+ assert.ok(Math.hypot(agent.x-out.x,agent.y-out.y)<14,`human exits through ${side} door`);
+}
+console.log('PASS: physical navigation through all four door directions');
